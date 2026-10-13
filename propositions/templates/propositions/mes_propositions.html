@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Mes propositions - CargoLink{% endblock %}
+
+{% block content %}
+<h3 class="mb-3">Mes propositions</h3>
+<table class="table bg-white align-middle">
+  <thead><tr><th>Demande</th><th>Véhicule</th><th>Prix</th><th>Durée</th><th>Statut</th><th></th></tr></thead>
+  <tbody>
+  {% for p in propositions %}
+    <tr>
+      <td><a href="{% url 'annonces:detail' p.demande_id %}">{{ p.demande.origin }} → {{ p.demande.destination }}</a></td>
+      <td>{{ p.vehicle.registration_number }}</td>
+      <td>{{ p.price }} TND</td><td>{{ p.estimated_duration }} h</td>
+      <td><span class="badge {{ p.badge_class }}">{{ p.get_status_display }}</span></td>
+      <td class="text-end">
+        {% if p.status == "PENDING" %}
+          <form method="post" action="{% url 'propositions:retirer' p.pk %}"
+                onsubmit="return confirm('Retirer cette proposition ?');">
+            {% csrf_token %}<button class="btn btn-sm btn-outline-danger">Retirer</button></form>
+        {% endif %}
+      </td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="6" class="text-center text-muted py-4">Aucune proposition.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

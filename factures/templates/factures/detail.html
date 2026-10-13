@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}{{ f.numero }} - CargoLink{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-start mb-3">
+  <div>
+    <h3 class="mb-1">{{ f.numero }} · {{ f.trajet }}</h3>
+    <span class="badge {{ f.badge_class }}">{{ f.get_status_display }}</span>
+    {% if f.en_retard %}<span class="badge bg-danger">En retard</span>{% endif %}
+    <a class="small ms-2" href="{% url 'annonces:detail' f.demande.pk %}">Demande #{{ f.demande.pk }}</a>
+  </div>
+  <a class="btn btn-outline-secondary" href="{% url 'factures:liste' %}">← Retour</a>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-7">
+    <div class="card mb-3"><div class="card-body">
+      <dl class="row mb-0">
+        <dt class="col-sm-4">Émetteur</dt><dd class="col-sm-8">{{ f.transporteur }}</dd>
+        <dt class="col-sm-4">Client</dt><dd class="col-sm-8">{{ f.pme }}</dd>
+        <dt class="col-sm-4">Montant HT</dt><dd class="col-sm-8">{{ f.montant_ht }} TND</dd>
+        <dt class="col-sm-4">TVA ({{ f.taux_tva|floatformat:"-2" }} %)</dt><dd class="col-sm-8">{{ f.montant_tva }} TND</dd>
+        <dt class="col-sm-4">Total TTC</dt><dd class="col-sm-8 fw-bold">{{ f.total_ttc }} TND</dd>
+        <dt class="col-sm-4">Déjà payé</dt><dd class="col-sm-8">{{ f.total_paye }} TND</dd>
+        <dt class="col-sm-4">Reste à payer</dt><dd class="col-sm-8 fw-bold">{{ f.reste_a_payer }} TND</dd>
+        <dt class="col-sm-4">Échéance</dt><dd class="col-sm-8">{{ f.date_echeance|date:"d/m/Y" }}</dd>
+        {% if f.emise_le %}<dt class="col-sm-4">Émise le</dt><dd class="col-sm-8">{{ f.emise_le|date:"d/m/Y H:i" }}</dd>{% endif %}
+        {% if f.notes %}<dt class="col-sm-4">Notes</dt><dd class="col-sm-8">{{ f.notes|linebreaksbr }}</dd>{% endif %}
+      </dl>
+    </div></div>
+
+    <div class="card"><div class="card-body">
+      <h5 class="mb-3">Paiements</h5>
+      <table class="table table-sm align-middle mb-0">
+        <thead><tr><th>Date</th><th>Montant</th><th>Mode</th><th>Référence</th><th></th></tr></thead>
+        <tbody>
+        {% for p in paiements %}
+          <tr>
+            <td>{{ p.date_paiement|date:"d/m/Y" }}</td><td>{{ p.montant }} TND</td>
+            <td>{{ p.get_mode_display }}</td><td>{{ p.reference|default:"-" }}</td>
+            <td class="text-end text-nowrap">
+              {% if est_transporteur and f.paiements_modifiables %}
+                <a class="btn btn-sm btn-outline-secondary" href="{% url 'factures:paiement_modifier' p.pk %}">Modifier</a>
+                <form method="post" action="{% url 'factures:paiement_supprimer' p.pk %}" class="d-inline"
+                      onsubmit="return confirm('Supprimer ce paiement ?');">
+                  {% csrf_token %}<button class="btn btn-sm btn-outline-danger">Supprimer</button></form>
+              {% endif %}
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5" class="text-muted text-center py-3">Aucun paiement.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div></div>
+  </div>
+
+  <div class="col-md-5">
+    {% if est_transporteur %}
+    <div class="card mb-3"><div class="card-body">
+      <h6>Actions</h6>
+      {% if f.peut_emettre %}
+        <form method="post" action="{% url 'factures:emettre' f.pk %}" class="mb-2"
+              onsubmit="return confirm('Émettre la facture ? Elle ne sera plus modifiable.');">
+          {% csrf_token %}<button class="btn btn-primary w-100">Émettre la facture</button></form>
+      {% endif %}
+      {% if f.est_modifiable %}
+        <a class="btn btn-outline-primary w-100 mb-2" href="{% url 'factures:modifier' f.pk %}">Modifier</a>
+      {% endif %}
+      {% if f.peut_annuler %}
+        <form method="post" action="{% url 'factures:annuler' f.pk %}" class="mb-2"
+              onsubmit="return confirm('Annuler cette facture ?');">
+          {% csrf_token %}<button class="btn btn-outline-warning w-100">Annuler la facture</button></form>
+      {% endif %}
+      {% if f.est_supprimable %}
+        <form method="post" action="{% url 'factures:supprimer' f.pk %}"
+              onsubmit="return confirm('Supprimer définitivement cette facture ?');">
+          {% csrf_token %}<button class="btn btn-outline-danger w-100">Supprimer</button></form>
+      {% endif %}
+      {% if not f.peut_emettre and not f.est_modifiable and not f.peut_annuler and not f.est_supprimable %}
+        <div class="text-muted small">Aucune action disponible.</div>
+      {% endif %}
+    </div></div>
+    {% endif %}
+
+    {% if paiement_form %}
+    <div class="card"><div class="card-body">
+      <h6>Enregistrer un paiement</h6>
+      <form method="post" action="{% url 'factures:paiement_ajouter' f.pk %}">
+        {% csrf_token %}
+        {% for field in paiement_form %}
+          <div class="mb-2">
+            <label class="form-label small mb-0" for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}
+          </div>
+        {% endfor %}
+        <button class="btn btn-success w-100">Enregistrer</button>
+      </form>
+    </div></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

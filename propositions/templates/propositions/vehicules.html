@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Véhicules - CargoLink{% endblock %}
+
+{% block content %}
+<h3 class="mb-3">Mes véhicules</h3>
+<div class="row g-4">
+  <div class="col-md-8">
+    <table class="table bg-white align-middle">
+      <thead><tr><th>Immatriculation</th><th>Type</th><th>Capacité</th><th>Volume</th><th>Dispo</th><th></th></tr></thead>
+      <tbody>
+      {% for v in vehicules %}
+        <tr>
+          <td>{{ v.registration_number }}</td><td>{{ v.get_type_display }}</td>
+          <td>{{ v.capacity_weight }} kg</td><td>{{ v.capacity_volume }} m³</td>
+          <td><span class="badge {% if v.availability %}bg-success{% else %}bg-secondary{% endif %}">
+            {% if v.availability %}Oui{% else %}Non{% endif %}</span></td>
+          <td class="text-end">
+            <form method="post" action="{% url 'propositions:vehicule_toggle' v.pk %}" class="d-inline">
+              {% csrf_token %}<button class="btn btn-sm btn-outline-secondary">Dispo on/off</button></form>
+            <form method="post" action="{% url 'propositions:vehicule_supprimer' v.pk %}" class="d-inline"
+                  onsubmit="return confirm('Supprimer ce véhicule ?');">
+              {% csrf_token %}<button class="btn btn-sm btn-outline-danger">Supprimer</button></form>
+          </td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="6" class="text-center text-muted py-4">Aucun véhicule.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="col-md-4">
+    <div class="card"><div class="card-body">
+      <h5>Ajouter un véhicule</h5>
+      <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+          <div class="mb-2 {% if field.name == 'availability' %}form-check{% endif %}">
+            {% if field.name == 'availability' %}{{ field }}<label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {% else %}<label class="form-label small mb-0" for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% endif %}
+            {% for e in field.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+          </div>
+        {% endfor %}
+        <button class="btn btn-primary w-100 mt-2">Ajouter</button>
+      </form>
+    </div></div>
+  </div>
+</div>
+{% endblock %}

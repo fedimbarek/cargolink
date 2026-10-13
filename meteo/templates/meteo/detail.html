@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Météo - {{ d.origin }} → {{ d.destination }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-start mb-3">
+  <div>
+    <h3 class="mb-1">Météo du trajet</h3>
+    <div class="text-muted">{{ d.origin }} → {{ d.destination }}</div>
+  </div>
+  <div class="d-flex gap-2">
+    <form method="post" action="{% url 'meteo:actualiser' d.pk %}" class="m-0">
+      {% csrf_token %}<button class="btn btn-outline-primary">Actualiser</button>
+    </form>
+    <a class="btn btn-outline-secondary" href="{% url 'annonces:detail' d.pk %}">← Retour</a>
+  </div>
+</div>
+
+<div class="row g-3">
+  {% for c in cartes %}
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>{{ c.titre }} : {{ c.ville }}</strong>
+        <span class="text-muted small">{{ c.date|date:"d/m/Y H:i" }}</span>
+      </div>
+      <div class="card-body">
+        {% with p=c.prevision %}
+          {% if p %}
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="fs-5">{{ p.resume }}</span>
+              <span class="badge {{ p.badge_class }}">Risque {{ p.get_risque_display|lower }}</span>
+            </div>
+            <dl class="row mb-0">
+              <dt class="col-sm-6">Température</dt><dd class="col-sm-6">{{ p.temp_min }} °C à {{ p.temp_max }} °C</dd>
+              <dt class="col-sm-6">Pluie</dt><dd class="col-sm-6">{{ p.precipitation_mm }} mm</dd>
+              <dt class="col-sm-6">Vent maximum</dt><dd class="col-sm-6">{{ p.vent_kmh }} km/h</dd>
+            </dl>
+            {% if p.raisons %}<div class="alert alert-{% if p.risque == 'ELEVE' %}danger{% else %}warning{% endif %} mt-3 mb-0">À surveiller : {{ p.raisons }}.</div>{% endif %}
+            <div class="text-muted small mt-3">Mis à jour le {{ p.maj_le|date:"d/m/Y H:i" }}</div>
+          {% else %}
+            <div class="text-muted">Aucune prévision disponible pour ce point.</div>
+          {% endif %}
+        {% endwith %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<p class="text-muted small mt-3">Prévisions fournies par <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (disponibles pour les 16 prochains jours).</p>
+{% endblock %}
