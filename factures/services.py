@@ -49,12 +49,8 @@ def echeance_par_defaut():
     return timezone.localdate() + timedelta(days=DELAI_DEFAUT_JOURS)
 
 
-# Statuts de la demande pour lesquels on peut facturer. Comme le module réservations (suivi de livraison)
-# n'existe pas encore, on accepte toute mission dont la proposition est acceptée.
-# Pour n'autoriser que les missions livrées: STATUTS_FACTURABLES = (DemandeTransport.Status.DELIVERED,)
-STATUTS_FACTURABLES = (DemandeTransport.Status.ASSIGNED,
-                       DemandeTransport.Status.IN_PROGRESS,
-                       DemandeTransport.Status.DELIVERED)
+# Une facture n'est autorisée que pour une mission déjà livrée.
+STATUTS_FACTURABLES = (DemandeTransport.Status.DELIVERED,)
 
 
 def est_facturable(proposition):
