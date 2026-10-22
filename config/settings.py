@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'evaluations',
     'meteo',
     'factures',
+    'reclamations',
 ]
 
 MIDDLEWARE = [
@@ -149,6 +150,7 @@ REST_FRAMEWORK = {
     ),
 }
 
-LOGIN_URL = 'login_page'
-LOGIN_REDIRECT_URL = 'dashboard'
-LOGOUT_REDIRECT_URL = 'login_page'
+# config/settings.py
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/dashboard/'
+LOGOUT_REDIRECT_URL = '/login/'
