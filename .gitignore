@@ -25,3 +25,7 @@ media/
 .coverage
 htmlcov/
 .pytest_cache/
+reclamations/ia_model.pkl
+reclamations/pieces_jointes/
+db.sqlite3
+.venv/

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Supprimer la réclamation - CargoLink{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger shadow-sm">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">Confirmer la suppression</h4>
+            </div>
+            <div class="card-body">
+                <p>Êtes-vous sûr de vouloir supprimer la réclamation <strong>#{{ object.id }} — {{ object.sujet }}</strong> ?</p>
+                <p class="text-danger mb-3">Cette action est irréversible.</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Oui, supprimer</button>
+                    <a href="{% url 'reclamations:liste' %}" class="btn btn-secondary">Annuler</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
