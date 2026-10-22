@@ -103,5 +103,7 @@ def accepter_proposition(proposition):
         status=Proposition.Status.PENDING).update(status=Proposition.Status.REJECTED)
     demande.status = DemandeTransport.Status.ASSIGNED
     demande.save(update_fields=["status"])
-    # TODO module reservations: créer ici la Reservation liée à cette proposition
+    from reservations.services import creer_reservation
+
+    creer_reservation(proposition)
     return proposition

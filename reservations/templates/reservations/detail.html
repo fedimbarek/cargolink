@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Réservation #{{ r.pk }} - CargoLink{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-start mb-3">
+  <div>
+    <h3 class="mb-1">Réservation #{{ r.pk }} : {{ r.demande.origin }} → {{ r.demande.destination }}</h3>
+    <span class="badge {{ r.badge_class }}">{{ r.get_status_display }}</span>
+    <a class="small ms-2" href="{% url 'annonces:detail' r.demande.pk %}">Voir la demande</a>
+  </div>
+  <a class="btn btn-outline-secondary" href="{% url 'reservations:liste' %}">← Retour</a>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-7">
+    <div class="card mb-3"><div class="card-body">
+      <dl class="row mb-0">
+        <dt class="col-sm-4">PME</dt><dd class="col-sm-8">{{ r.pme }}</dd>
+        <dt class="col-sm-4">Transporteur</dt>
+        <dd class="col-sm-8">{{ r.transporteur }} ({{ r.transporteur.rating }}/5)
+          <a class="small ms-1" href="{% url 'evaluations:avis' r.transporteur.pk %}">avis</a></dd>
+        <dt class="col-sm-4">Véhicule</dt><dd class="col-sm-8">{{ r.proposition.vehicle }}</dd>
+        <dt class="col-sm-4">Marchandise</dt><dd class="col-sm-8">{{ r.demande.cargo_type }} - {{ r.demande.weight }} kg</dd>
+        <dt class="col-sm-4">Prix</dt><dd class="col-sm-8">{{ r.proposition.price }} TND</dd>
+        <dt class="col-sm-4">Chargement prévu</dt><dd class="col-sm-8">{{ r.demande.pickup_date|date:"d/m/Y H:i" }}</dd>
+        <dt class="col-sm-4">Livraison souhaitée</dt><dd class="col-sm-8">{{ r.demande.delivery_date|date:"d/m/Y H:i" }}</dd>
+      </dl>
+    </div></div>
+
+    <div class="card"><div class="card-body">
+      <h5>Suivi de livraison</h5>
+      <ul class="list-group list-group-flush">
+        {% for e in etapes %}
+          <li class="list-group-item px-0">
+            <strong>{{ e.get_type_display }}</strong>
+            <span class="text-muted small ms-2">{{ e.created_at|date:"d/m/Y H:i" }}</span>
+            {% if e.localisation %}<span class="badge bg-light text-dark ms-1">{{ e.localisation }}</span>{% endif %}
+            {% if e.commentaire %}<div class="small">{{ e.commentaire }}</div>{% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div></div>
+  </div>
+
+  <div class="col-md-5">
+    {% if est_transporteur %}
+      <div class="card mb-3"><div class="card-body">
+        <h6>Actions transporteur</h6>
+        {% if r.status == "CONFIRMEE" %}
+          <form method="post" action="{% url 'reservations:demarrer' r.pk %}" class="mb-2">{% csrf_token %}
+            <input class="form-control form-control-sm mb-1" name="localisation" placeholder="Lieu de chargement">
+            <input class="form-control form-control-sm mb-1" name="commentaire" placeholder="Commentaire">
+            <button class="btn btn-primary w-100">Marchandise chargée : démarrer</button>
+          </form>
+        {% elif r.status == "EN_COURS" %}
+          <form method="post" action="{% url 'reservations:etape' r.pk %}" class="mb-3">{% csrf_token %}
+            <select name="type" class="form-select form-select-sm mb-1">
+              {% for val, lab in types_etape %}<option value="{{ val }}">{{ lab }}</option>{% endfor %}
+            </select>
+            <input class="form-control form-control-sm mb-1" name="localisation" placeholder="Position actuelle">
+            <input class="form-control form-control-sm mb-1" name="commentaire" placeholder="Commentaire">
+            <button class="btn btn-outline-primary w-100">Ajouter une étape</button>
+          </form>
+          <form method="post" action="{% url 'reservations:livrer' r.pk %}">{% csrf_token %}
+            <input class="form-control form-control-sm mb-1" name="commentaire" placeholder="Commentaire de livraison">
+            <button class="btn btn-success w-100">Confirmer la livraison</button>
+          </form>
+        {% else %}
+          <div class="text-muted small">Aucune action disponible.</div>
+        {% endif %}
+      </div></div>
+    {% endif %}
+
+    {% if r.status == "CONFIRMEE" %}{% if est_transporteur or est_pme %}
+      <form method="post" action="{% url 'reservations:annuler' r.pk %}" class="mb-3"
+            onsubmit="return confirm('Annuler cette réservation ? La demande sera annulée.');">{% csrf_token %}
+        <input class="form-control form-control-sm mb-1" name="motif" placeholder="Motif d'annulation">
+        <button class="btn btn-outline-danger w-100">Annuler la réservation</button>
+      </form>
+    {% endif %}{% endif %}
+
+    {% if r.status == "LIVREE" %}
+      <div class="card"><div class="card-body">
+        <h6>Évaluation du transporteur</h6>
+        {% if evaluation %}
+          <div class="fs-4 text-warning">{{ evaluation.etoiles }}</div>
+          {% if evaluation.commentaire %}<p class="mb-0">{{ evaluation.commentaire }}</p>{% endif %}
+        {% elif est_pme %}
+          <form method="post" action="{% url 'evaluations:evaluer' r.pk %}">{% csrf_token %}
+            <select name="note" class="form-select mb-2" required>
+              <option value="5">★★★★★ Excellent</option><option value="4">★★★★☆ Très bien</option>
+              <option value="3">★★★☆☆ Correct</option><option value="2">★★☆☆☆ Décevant</option>
+              <option value="1">★☆☆☆☆ Mauvais</option>
+            </select>
+            <textarea name="commentaire" class="form-control mb-2" rows="2" placeholder="Commentaire (optionnel)"></textarea>
+            <button class="btn btn-warning w-100">Envoyer la note</button>
+          </form>
+        {% else %}
+          <div class="text-muted small">Pas encore évaluée par la PME.</div>
+        {% endif %}
+      </div></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Confirmer la réservation - CargoLink{% endblock %}
+
+{% block content %}
+<div class="card mx-auto" style="max-width: 720px;">
+  <div class="card-body">
+    <h3 class="card-title">Confirmer la réservation</h3>
+    <p class="text-muted">
+      Proposition de {{ p.transporteur }} pour {{ p.demande.origin }} → {{ p.demande.destination }}
+      — {{ p.price }} TND.
+      Vérifiez ou modifiez les coordonnées de contact avant de confirmer.
+    </p>
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="mb-3">
+          <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% for error in field.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        </div>
+      {% endfor %}
+      <button class="btn btn-success">Confirmer et créer la réservation</button>
+      <a class="btn btn-outline-secondary" href="{% url 'propositions:comparer' p.demande_id %}">Retour</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

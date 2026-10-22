@@ -37,6 +37,7 @@ urlpatterns = [
     path('propositions/', include('propositions.web_urls')),
     path('meteo/', include('meteo.web_urls')),
     path('factures/', include('factures.web_urls')),
+    path('reservations/', include('reservations.web_urls')),
     path('api/auth/', include('users.urls')),
     path('api/annonces/', include('annonces.urls')),
     path('api/propositions/', include('propositions.urls')),
