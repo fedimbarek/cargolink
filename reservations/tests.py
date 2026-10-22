@@ -13,7 +13,7 @@ from propositions.services import accepter_proposition
 from users.models import PME, Transporteur, User
 
 from . import services
-from .models import EtapeSuivi, Reservation
+from .models import EtapeSuivi, Notification, Reservation
 
 RAPIDE = override_settings(PASSWORD_HASHERS=["django.contrib.auth.hashers.MD5PasswordHasher"])
 
@@ -91,6 +91,39 @@ class ServicesTests(Base, TestCase):
 
 @RAPIDE
 class WebTests(Base, TestCase):
+    def test_compteur_et_tout_marquer_comme_lu(self):
+        notification = self.u_tr.notifications_suivi.get()
+        self.client.force_login(self.u_tr)
+
+        reponse = self.client.get(reverse("reservations:notifications"))
+        self.assertContains(reponse, ">1</span>")
+
+        notification_pme = Notification.objects.create(user=self.u_pme, message="Notification PME")
+        url = reverse("reservations:notifications_tout_lire")
+        reponse = self.client.post(url)
+
+        self.assertRedirects(reponse, reverse("reservations:notifications"))
+        notification.refresh_from_db()
+        notification_pme.refresh_from_db()
+        self.assertTrue(notification.lue)
+        self.assertFalse(notification_pme.lue)
+        self.assertNotContains(self.client.get(reverse("reservations:notifications")), ">1</span>")
+
+    def test_supprimer_notification_et_interdire_celle_d_un_autre_user(self):
+        notification = self.u_tr.notifications_suivi.get()
+        notification_pme = Notification.objects.create(user=self.u_pme, message="Notification PME")
+        self.client.force_login(self.u_tr)
+
+        url = reverse("reservations:notification_supprimer", args=[notification.pk])
+        reponse = self.client.post(url)
+
+        self.assertRedirects(reponse, reverse("reservations:notifications"))
+        self.assertFalse(Notification.objects.filter(pk=notification.pk).exists())
+
+        url_autre_user = reverse("reservations:notification_supprimer", args=[notification_pme.pk])
+        self.assertEqual(self.client.post(url_autre_user).status_code, 404)
+        self.assertTrue(Notification.objects.filter(pk=notification_pme.pk).exists())
+
     def test_seul_le_transporteur_demarre(self):
         url = reverse("reservations:demarrer", args=[self.r.pk])
         self.client.force_login(self.u_pme)

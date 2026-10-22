@@ -12,6 +12,7 @@ urlpatterns = [
     path("<int:pk>/livrer/", views.livrer, name="livrer"),
     path("<int:pk>/annuler/", views.annuler, name="annuler"),
     path("notifications/", views.notifications, name="notifications"),
+    path("notifications/<int:pk>/supprimer/", views.notification_supprimer, name="notification_supprimer"),
     path("notifications/<int:pk>/", views.notification_ouvrir, name="notification_ouvrir"),
     path("notifications/tout-lire/", views.notifications_tout_lire, name="notifications_tout_lire"),
 ]

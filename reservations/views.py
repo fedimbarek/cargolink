@@ -105,6 +105,14 @@ def notification_ouvrir(request, pk):
 
 @login_required
 @require_POST
+def notification_supprimer(request, pk):
+    notification = get_object_or_404(Notification, pk=pk, user=request.user)
+    notification.delete()
+    return redirect("reservations:notifications")
+
+
+@login_required
+@require_POST
 def notifications_tout_lire(request):
     request.user.notifications_suivi.filter(lue=False).update(lue=True)
     return redirect("reservations:notifications")
