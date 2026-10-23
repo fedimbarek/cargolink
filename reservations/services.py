@@ -8,23 +8,78 @@ Logique métier du module reservations (réservation + suivi de livraison + noti
   - notifier()            : crée une notification interne pour un utilisateur
 Chaque changement d'état ajoute une EtapeSuivi et notifie l'autre partie.
 """
+import logging
+from urllib.parse import urljoin
+
+from django.conf import settings
 from django.db import transaction
 from django.urls import reverse
 from django.utils import timezone
 
+import requests
+
 from annonces.models import DemandeTransport
 
 from .models import EtapeSuivi, Notification, Reservation
+
+logger = logging.getLogger(__name__)
 
 
 class ErreurReservation(Exception):
     """Règle métier non respectée (message affichable à l'utilisateur)."""
 
 
+def _envoyer_email_notification(email, nom, message, lien):
+    if not settings.BREVO_API_KEY or not settings.BREVO_SENDER_EMAIL:
+        logger.warning("Email de notification non envoyé : configuration Brevo manquante.")
+        return
+
+    url_notifications = urljoin(
+        f"{settings.SITE_URL.rstrip('/')}/",
+        (lien or reverse("reservations:notifications")).lstrip("/"),
+    )
+    try:
+        reponse = requests.post(
+            "https://api.brevo.com/v3/smtp/email",
+            headers={
+                "accept": "application/json",
+                "api-key": settings.BREVO_API_KEY,
+                "content-type": "application/json",
+            },
+            json={
+                "sender": {
+                    "name": settings.BREVO_SENDER_NAME,
+                    "email": settings.BREVO_SENDER_EMAIL,
+                },
+                "to": [{"email": email, "name": nom}],
+                "subject": "Nouvelle notification CargoLink",
+                "textContent": (
+                    f"Bonjour {nom},\n\n"
+                    f"Vous avez une nouvelle notification :\n\n{message}\n\n"
+                    f"Consultez-la ici : {url_notifications}"
+                ),
+            },
+            timeout=10,
+        )
+        reponse.raise_for_status()
+    except requests.RequestException:
+        logger.exception("Échec de l'envoi de l'email de notification via Brevo.")
+
+
 def notifier(user, message, lien="", transporteur=None):
-    return Notification.objects.create(
+    notification = Notification.objects.create(
         user=user, transporteur=transporteur, message=message[:255], lien=lien
     )
+    transaction.on_commit(
+        lambda: _envoyer_email_notification(
+            user.email,
+            user.get_full_name() or user.username,
+            notification.message,
+            notification.lien,
+        ),
+        robust=True,
+    )
+    return notification
 
 
 def _lien(reservation):

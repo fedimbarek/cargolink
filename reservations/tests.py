@@ -1,5 +1,6 @@
 from datetime import timedelta
 from decimal import Decimal
+from unittest.mock import Mock, patch
 
 from django.test import TestCase, override_settings
 from django.urls import reverse
@@ -53,6 +54,33 @@ class Base:
 
 @RAPIDE
 class ServicesTests(Base, TestCase):
+    def test_notifier_envoie_un_email_apres_creation(self):
+        reponse_api = Mock()
+        with self.settings(
+            BREVO_API_KEY="cle-test",
+            BREVO_SENDER_EMAIL="notifications@example.com",
+            BREVO_SENDER_NAME="CargoLink",
+            SITE_URL="https://cargolink.example",
+        ), patch("reservations.services.requests.post", return_value=reponse_api) as envoyer:
+            with self.captureOnCommitCallbacks(execute=True):
+                services.notifier(
+                    self.u_pme,
+                    "Votre réservation a été mise à jour.",
+                    "/reservations/1/",
+                )
+
+        reponse_api.raise_for_status.assert_called_once_with()
+        envoyer.assert_called_once()
+        self.assertEqual(envoyer.call_args.args[0], "https://api.brevo.com/v3/smtp/email")
+        self.assertEqual(envoyer.call_args.kwargs["headers"]["api-key"], "cle-test")
+        self.assertEqual(envoyer.call_args.kwargs["json"]["to"], [
+            {"email": self.u_pme.email, "name": self.u_pme.username}
+        ])
+        self.assertIn(
+            "https://cargolink.example/reservations/1/",
+            envoyer.call_args.kwargs["json"]["textContent"],
+        )
+
     def test_acceptation_cree_reservation_et_notifie(self):
         self.assertEqual(self.r.status, Reservation.Status.CONFIRMEE)
         self.assertEqual(self.r.etapes.count(), 1)
