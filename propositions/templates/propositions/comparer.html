@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Comparer les offres - CargoLink{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Offres pour {{ d.origin }} → {{ d.destination }}</h1>
+  <a class="btn btn-outline-secondary" href="{% url 'annonces:detail' d.pk %}">← Retour</a>
+</div>
+{% if estimation %}<p class="small">Prix du marché estimé par l'IA : <strong>{{ estimation.prix }} TND</strong> (fourchette {{ estimation.bas }} – {{ estimation.haut }}).</p>{% endif %}
+<p class="text-muted">Score /100 = 50 % prix + 30 % note du transporteur + 20 % durée.</p>
+<div class="table-responsive"><table class="table bg-white align-middle">
+<caption class="visually-hidden">Comparaison des offres</caption>
+  <thead><tr><th scope="col">Transporteur</th><th scope="col">Véhicule</th><th scope="col">Prix</th><th scope="col">Vs marché (IA)</th><th scope="col">≈ EUR</th><th scope="col">Prix/km</th><th scope="col">Durée</th><th scope="col">Note</th><th scope="col">Score</th><th scope="col">Statut</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr></thead>
+  <tbody>
+  {% for l in lignes %}
+    {% with p=l.proposition %}
+    <tr {% if l.recommandee %}class="table-success"{% endif %}>
+      <td>{{ p.transporteur }}{% if l.recommandee %} <span class="badge bg-success">Recommandée</span>{% endif %}
+        {% if p.message %}<div class="small text-muted">{{ p.message }}</div>{% endif %}</td>
+      <td>{{ p.vehicle.registration_number }}</td>
+      <td>{{ p.price }} TND</td>
+      <td>{% if l.marche %}<span class="badge {{ l.marche.2 }}">{{ l.marche.1 }}</span>{% else %}-{% endif %}</td>
+      <td>{% if l.prix_eur %}{{ l.prix_eur }} €{% else %}-{% endif %}</td>
+      <td>{% if l.prix_km %}{{ l.prix_km }}{% else %}-{% endif %}</td>
+      <td>{{ p.estimated_duration }} h</td>
+      <td>{{ p.transporteur.rating }}/5</td>
+      <td><strong>{{ l.score }}</strong></td>
+      <td><span class="badge {{ p.badge_class }}">{{ p.get_status_display }}</span></td>
+      <td>
+        {% if p.status == "PENDING" and d.status == "OPEN" %}
+          <form method="post" action="{% url 'propositions:accepter' p.pk %}"
+                onsubmit="return confirm('Accepter cette proposition ? Les autres seront refusées.');">
+            {% csrf_token %}<button class="btn btn-sm btn-success">Accepter</button></form>
+        {% endif %}
+      </td>
+    </tr>
+    {% endwith %}
+  {% empty %}
+    <tr><td colspan="11" class="text-center text-muted py-4">Aucune proposition pour le moment.</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}

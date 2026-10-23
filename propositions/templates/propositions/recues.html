@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Propositions reçues - CargoLink{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-1">Propositions reçues</h1>
+<p class="text-muted">Toutes les offres des transporteurs sur vos demandes. Ouvrez la comparaison pour choisir.</p>
+<div class="table-responsive">
+<div class="table-responsive"><table class="table table-hover bg-white align-middle">
+<caption class="visually-hidden">Propositions reçues</caption>
+  <thead><tr>
+    <th scope="col">Demande</th><th scope="col">Transporteur</th><th scope="col">Véhicule</th><th scope="col">Prix</th><th scope="col">Durée</th><th scope="col">Statut</th><th scope="col"><span class="visually-hidden">Actions</span></th>
+  </tr></thead>
+  <tbody>
+  {% for p in propositions %}
+    <tr>
+      <td><a href="{% url 'annonces:detail' p.demande_id %}">{{ p.demande.origin }} → {{ p.demande.destination }}</a></td>
+      <td>{{ p.transporteur }} <span class="text-muted small">({{ p.transporteur.rating }}/5)</span></td>
+      <td>{{ p.vehicle.registration_number }}</td>
+      <td>{{ p.price }} TND</td>
+      <td>{{ p.estimated_duration }} h</td>
+      <td><span class="badge {{ p.badge_class }}">{{ p.get_status_display }}</span></td>
+      <td><a class="btn btn-sm btn-outline-primary" href="{% url 'propositions:comparer' p.demande_id %}">Comparer</a></td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="7" class="text-center text-muted py-4">
+      Aucune proposition pour le moment. Les transporteurs vérifiés répondent à vos demandes ouvertes.
+    </td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+</div>
+{% endblock %}

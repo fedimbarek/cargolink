@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Factures - CargoLink{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">{% if user.role == "TRANSPORTEUR" %}Mes factures{% else %}Factures reçues{% endif %}</h1>
+  {% if user.role == "TRANSPORTEUR" %}<a class="btn btn-success" href="{% url 'factures:nouvelle' %}">+ Nouvelle facture</a>{% endif %}
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3"><div class="card text-center"><div class="card-body">
+    <div class="fs-4 fw-bold">{{ stats.total|floatformat:2 }}</div><div class="text-muted small">Facturé TTC (TND)</div></div></div></div>
+  <div class="col-6 col-md-3"><div class="card text-center"><div class="card-body">
+    <div class="fs-4 fw-bold">{{ stats.paye|floatformat:2 }}</div><div class="text-muted small">Payé (TND)</div></div></div></div>
+  <div class="col-6 col-md-3"><div class="card text-center"><div class="card-body">
+    <div class="fs-4 fw-bold">{{ stats.reste|floatformat:2 }}</div><div class="text-muted small">Reste à payer (TND)</div></div></div></div>
+  <div class="col-6 col-md-3"><div class="card text-center"><div class="card-body">
+    <div class="fs-4 fw-bold {% if stats.retard %}text-danger{% endif %}">{{ stats.retard }}</div>
+    <div class="text-muted small">En retard</div></div></div></div>
+</div>
+
+{% if a_facturer %}
+<div class="alert alert-info">
+  <strong>Missions à facturer :</strong>
+  {% for p in a_facturer %}
+    <a class="btn btn-sm btn-success ms-2" href="{% url 'factures:creer' p.pk %}">Demande #{{ p.demande_id }} ({{ p.demande.origin }} → {{ p.demande.destination }})</a>
+  {% endfor %}
+</div>
+{% endif %}
+
+<form method="get" class="card card-body mb-4" aria-label="Filtres">
+  <div class="row g-2 align-items-end">
+    {% for field in form %}
+      <div class="col-6 col-md-3">
+        <label class="form-label small mb-0" for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}
+      </div>
+    {% endfor %}
+    <div class="col-12 col-md-3">
+      <button class="btn btn-sm btn-primary">Filtrer</button>
+      <a class="btn btn-sm btn-outline-secondary" href="{% url 'factures:liste' %}">Réinitialiser</a>
+    </div>
+  </div>
+</form>
+
+<div class="table-responsive">
+<div class="table-responsive"><table class="table table-hover bg-white align-middle">
+<caption class="visually-hidden">Liste des factures</caption>
+  <thead><tr>
+    <th scope="col">N°</th><th scope="col">Trajet</th><th scope="col">{% if user.role == "TRANSPORTEUR" %}PME{% else %}Transporteur{% endif %}</th>
+    <th scope="col">Total TTC</th><th scope="col">Reste</th><th scope="col">Échéance</th><th scope="col">Statut</th><th scope="col"><span class="visually-hidden">Actions</span></th>
+  </tr></thead>
+  <tbody>
+  {% for f in factures %}
+    <tr>
+      <td>{{ f.numero }}</td>
+      <td>{{ f.trajet }}</td>
+      <td>{% if user.role == "TRANSPORTEUR" %}{{ f.pme }}{% else %}{{ f.transporteur }}{% endif %}</td>
+      <td>{{ f.total_ttc }} TND</td>
+      <td>{{ f.reste_a_payer }} TND</td>
+      <td>{{ f.date_echeance|date:"d/m/Y" }}{% if f.en_retard %} <span class="badge bg-danger">Retard</span>{% endif %}</td>
+      <td><span class="badge {{ f.badge_class }}">{{ f.get_status_display }}</span></td>
+      <td><a class="btn btn-sm btn-outline-primary" href="{% url 'factures:detail' f.pk %}">Voir</a></td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="8" class="text-center text-muted py-4">Aucune facture.</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+</div>
+{% endblock %}

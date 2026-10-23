@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Demandes - CargoLink{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">{% if user.role == "PME" %}Mes demandes de transport{% else %}Demandes disponibles{% endif %}</h1>
+  {% if user.role == "PME" %}<a class="btn btn-primary" href="{% url 'annonces:creer' %}">+ Nouvelle demande</a>{% endif %}
+</div>
+
+{% if stats %}
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3"><div class="card text-center"><div class="card-body">
+    <div class="fs-3 fw-bold">{{ stats.total }}</div><div class="text-muted small">Demandes</div></div></div></div>
+  <div class="col-6 col-md-3"><div class="card text-center"><div class="card-body">
+    <div class="fs-3 fw-bold">{{ stats.ouvertes }}</div><div class="text-muted small">Ouvertes</div></div></div></div>
+  <div class="col-6 col-md-3"><div class="card text-center"><div class="card-body">
+    <div class="fs-3 fw-bold">{{ stats.attribuees }}</div><div class="text-muted small">Attribuées</div></div></div></div>
+  <div class="col-6 col-md-3"><div class="card text-center"><div class="card-body">
+    <div class="fs-3 fw-bold">{{ stats.distance_moy|default_if_none:"-"|floatformat:0 }}</div>
+    <div class="text-muted small">Distance moy. (km)</div></div></div></div>
+</div>
+{% endif %}
+
+<form method="get" class="card card-body mb-4" aria-label="Filtres">
+  {% if form.non_field_errors %}<div class="alert alert-danger" role="alert">{{ form.non_field_errors.0 }}</div>{% endif %}
+  <div class="row g-2 align-items-end">
+    {% for field in form %}
+      <div class="col-6 col-md-3">
+        <label class="form-label small mb-0" for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% for e in field.errors %}<div id="{{ field.auto_id }}_error" class="text-danger small" role="alert">{{ e }}</div>{% endfor %}
+      </div>
+    {% endfor %}
+    <div class="col-12 col-md-3">
+      <button class="btn btn-sm btn-primary">Filtrer</button>
+      <a class="btn btn-sm btn-outline-secondary" href="{% url 'annonces:liste' %}">Réinitialiser</a>
+    </div>
+  </div>
+</form>
+
+<div class="table-responsive">
+<div class="table-responsive"><table class="table table-hover bg-white align-middle">
+<caption class="visually-hidden">Liste des demandes de transport</caption>
+  <thead><tr>
+    <th scope="col">Trajet</th><th scope="col">Marchandise</th><th scope="col">Poids</th><th scope="col">Chargement</th><th scope="col">Distance</th>
+    <th scope="col">Offres</th><th scope="col">Statut</th><th scope="col"><span class="visually-hidden">Actions</span></th>
+  </tr></thead>
+  <tbody>
+  {% for d in demandes %}
+    <tr>
+      <td>{{ d.origin }} → {{ d.destination }}{% if user.role != "PME" %}<div class="text-muted small">{{ d.pme }}</div>{% endif %}</td>
+      <td>{{ d.cargo_type }}</td>
+      <td>{{ d.weight }} kg</td>
+      <td>{{ d.pickup_date|date:"d/m/Y H:i" }}</td>
+      <td>{% if d.distance_km %}{{ d.distance_km }} km{% else %}-{% endif %}</td>
+      <td>{{ d.nb_propositions }}</td>
+      <td><span class="badge {{ d.badge_class }}">{{ d.get_status_display }}</span></td>
+      <td><a class="btn btn-sm btn-outline-primary" href="{% url 'annonces:detail' d.pk %}">Voir</a></td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="8" class="text-center text-muted py-4">Aucune demande.</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+</div>
+{% endblock %}

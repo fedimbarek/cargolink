@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Accès refusé - CargoLink{% endblock %}
+{% block content %}
+<div class="text-center py-5">
+  <h1 class="display-5">403</h1>
+  <p class="lead">Vous n'avez pas le droit d'accéder à cette page.</p>
+  <a class="btn btn-primary" href="{% url 'home' %}">Retour à l'accueil</a>
+</div>
+{% endblock %}

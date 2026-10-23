@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Matching - CargoLink{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-1">Demandes compatibles avec vos véhicules</h1>
+<p class="text-muted">Triées par taux de remplissage : plus il est élevé, moins vous transportez à vide.</p>
+<div class="table-responsive"><table class="table bg-white align-middle">
+<caption class="visually-hidden">Demandes compatibles</caption>
+  <thead><tr><th scope="col">Trajet</th><th scope="col">Poids</th><th scope="col">Chargement</th><th scope="col">Véhicule conseillé</th><th scope="col">Remplissage</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr></thead>
+  <tbody>
+  {% for r in resultats %}
+    <tr>
+      <td>{{ r.demande.origin }} → {{ r.demande.destination }}</td>
+      <td>{{ r.demande.weight }} kg</td>
+      <td>{{ r.demande.pickup_date|date:"d/m/Y H:i" }}</td>
+      <td>{{ r.vehicle.registration_number }}</td>
+      <td style="min-width:140px"><div class="progress"><div class="progress-bar" style="width: {{ r.taux }}%">{{ r.taux }}%</div></div></td>
+      <td><a class="btn btn-sm btn-outline-primary" href="{% url 'annonces:detail' r.demande.pk %}">Voir</a></td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="6" class="text-center text-muted py-4">Aucune demande compatible (ajoutez un véhicule disponible ?).</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}
