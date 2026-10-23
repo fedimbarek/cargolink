@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'meteo',
     'factures',
     'reclamations',
+    'chauffeurs',
 ]
 
 MIDDLEWARE = [

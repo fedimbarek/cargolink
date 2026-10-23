@@ -4,7 +4,34 @@
 {% block content %}
 <h3 class="mb-4">Bonjour {{ user.username }} 👋</h3>
 
-{% if user.role == "PME" %}
+{% if user.is_superuser or user.role == "ADMIN" %}
+  <div class="row g-3">
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-body p-4">
+          <h2 class="h5">Administration de CargoLink</h2>
+
+          <p class="text-muted">
+            Gérez les utilisateurs, validez les transporteurs
+            et consultez les données de la plateforme.
+          </p>
+
+          {% if user.is_staff %}
+          <a class="btn btn-primary" href="{% url 'admin:index' %}">
+            Ouvrir l’administration
+          </a>
+          {% else %}
+          <p class="text-muted">
+            L’accès à l’administration Django nécessite
+            les droits « Staff ».
+          </p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% elif user.role == "PME" %}
   <div class="row g-3">
     <div class="col-md-4">
       <div class="card h-100"><div class="card-body">
