@@ -22,13 +22,13 @@ jobs:
         run: python manage.py makemigrations --check --dry-run
       - name: Tests + couverture
         run: |
-          coverage run manage.py test
+          coverage run -m pytest
           coverage report --fail-under=75
           coverage xml
       - name: Vérification de déploiement (DEBUG=False)
         env:
           DEBUG: "False"
-          SECRET_KEY: ci-secret-key-not-used-in-prod
+          SECRET_KEY: ci-secret-key-not-used-in-prod-0123456789-abcdefghijklmnopqrstuvwxyz
           ALLOWED_HOSTS: cargolink.onrender.com
           SECURE_HSTS_PRELOAD: "True"
         run: python manage.py check --deploy --fail-level WARNING
