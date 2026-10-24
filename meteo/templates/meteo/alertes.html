@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <h3 class="mb-0">Alertes météo</h3>
+  <h1 class="h3 mb-0">Alertes météo</h1>
   <div class="d-flex gap-2">
     <form method="post" action="{% url 'meteo:alertes_actualiser' %}" class="m-0">
       {% csrf_token %}<button class="btn btn-primary btn-sm">Actualiser la météo</button>
@@ -16,8 +16,9 @@
   </div>
 </div>
 <div class="table-responsive">
-<table class="table table-hover bg-white align-middle">
-  <thead><tr><th>Demande</th><th>Niveau</th><th>Alerte</th>{% if user.role == "PME" %}<th>Statut</th>{% endif %}<th></th></tr></thead>
+<div class="table-responsive"><table class="table table-hover bg-white align-middle">
+<caption class="visually-hidden">Alertes météo</caption>
+  <thead><tr><th scope="col">Demande</th><th scope="col">Niveau</th><th scope="col">Alerte</th>{% if user.role == "PME" %}<th scope="col">Statut</th>{% endif %}<th scope="col"><span class="visually-hidden">Actions</span></th></tr></thead>
   <tbody>
   {% for a in alertes %}
     <tr {% if user.role == "PME" and not a.lue %}class="table-warning"{% endif %}>
@@ -34,6 +35,6 @@
     </td></tr>
   {% endfor %}
   </tbody>
-</table>
+</table></div>
 </div>
 {% endblock %}

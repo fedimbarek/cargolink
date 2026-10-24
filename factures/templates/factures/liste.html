@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <h3 class="mb-0">{% if user.role == "TRANSPORTEUR" %}Mes factures{% else %}Factures reçues{% endif %}</h3>
+  <h1 class="h3 mb-0">{% if user.role == "TRANSPORTEUR" %}Mes factures{% else %}Factures reçues{% endif %}</h1>
   {% if user.role == "TRANSPORTEUR" %}<a class="btn btn-success" href="{% url 'factures:nouvelle' %}">+ Nouvelle facture</a>{% endif %}
 </div>
 
@@ -28,7 +28,7 @@
 </div>
 {% endif %}
 
-<form method="get" class="card card-body mb-4">
+<form method="get" class="card card-body mb-4" aria-label="Filtres">
   <div class="row g-2 align-items-end">
     {% for field in form %}
       <div class="col-6 col-md-3">
@@ -43,10 +43,11 @@
 </form>
 
 <div class="table-responsive">
-<table class="table table-hover bg-white align-middle">
+<div class="table-responsive"><table class="table table-hover bg-white align-middle">
+<caption class="visually-hidden">Liste des factures</caption>
   <thead><tr>
-    <th>N°</th><th>Trajet</th><th>{% if user.role == "TRANSPORTEUR" %}PME{% else %}Transporteur{% endif %}</th>
-    <th>Total TTC</th><th>Reste</th><th>Échéance</th><th>Statut</th><th></th>
+    <th scope="col">N°</th><th scope="col">Trajet</th><th scope="col">{% if user.role == "TRANSPORTEUR" %}PME{% else %}Transporteur{% endif %}</th>
+    <th scope="col">Total TTC</th><th scope="col">Reste</th><th scope="col">Échéance</th><th scope="col">Statut</th><th scope="col"><span class="visually-hidden">Actions</span></th>
   </tr></thead>
   <tbody>
   {% for f in factures %}
@@ -64,6 +65,6 @@
     <tr><td colspan="8" class="text-center text-muted py-4">Aucune facture.</td></tr>
   {% endfor %}
   </tbody>
-</table>
+</table></div>
 </div>
 {% endblock %}

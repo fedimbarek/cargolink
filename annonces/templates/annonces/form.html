@@ -1,25 +1,42 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}{{ titre }} - CargoLink{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
   <div class="col-md-8">
     <div class="card shadow-sm"><div class="card-body p-4">
-      <h4 class="mb-3">{{ titre }}</h4>
+      <h1 class="h4 mb-3">{{ titre }}</h1>
       <form method="post" novalidate>
         {% csrf_token %}
         {% if form.non_field_errors %}
-          <div class="alert alert-danger">{% for e in form.non_field_errors %}{{ e }}<br>{% endfor %}</div>
+          <div class="alert alert-danger" role="alert">{% for e in form.non_field_errors %}{{ e }}<br>{% endfor %}</div>
         {% endif %}
         <div class="row">
           {% for field in form %}
             <div class="{% if field.name == 'description' %}col-12{% else %}col-md-6{% endif %} mb-3">
-              <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-              {{ field }}
-              {% for e in field.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+              {% include "includes/field.html" %}
             </div>
           {% endfor %}
         </div>
+        <section class="ia-panel card card-body bg-light mb-3" aria-labelledby="ia-titre">
+          <h2 class="h6" id="ia-titre">Estimation du prix du marché (IA)</h2>
+          <p class="small text-muted mb-2">Remplissez l'origine, la destination et le poids : le modèle estime le budget probable
+            (<a href="{% url 'ia:modele' %}">comment ça marche ?</a>).</p>
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <button type="button" id="ia-estimer" class="btn btn-outline-primary btn-sm"
+                    data-url="{% url 'ia:estimer' %}" data-poll-url="{% url 'ia:tache' 'TASK' %}" aria-busy="false">
+              <span id="ia-spinner" class="spinner-border spinner-border-sm" aria-hidden="true" hidden></span>
+              Estimer le prix
+            </button>
+            <span id="ia-statut" role="status" class="small"></span>
+          </div>
+          <div id="ia-erreur" class="alert alert-danger mt-2 mb-0" role="alert" hidden></div>
+          <div id="ia-resultat" class="ia-result mt-2" hidden aria-live="polite">
+            <strong class="ia-prix" id="ia-prix"></strong> <span id="ia-fourchette" class="text-muted"></span>
+            <div class="small" id="ia-detail"></div>
+          </div>
+        </section>
         <p class="text-muted small">La distance et la durée sont calculées automatiquement (OpenStreetMap / OSRM).</p>
         <button class="btn btn-primary">Enregistrer</button>
         <a class="btn btn-outline-secondary" href="{% url 'annonces:liste' %}">Annuler</a>
@@ -28,3 +45,4 @@
   </div>
 </div>
 {% endblock %}
+{% block scripts %}<script src="{% static 'js/estimation.js' %}" defer></script>{% endblock %}

@@ -37,12 +37,13 @@ class Base:
         self.res = self._proposition(livree=True)
 
     def _proposition(self, livree=True, prix="450.00"):
-        """Proposition ACCEPTÉE du transporteur `tr`; la demande est LIVRÉE si livree=True, sinon seulement ASSIGNÉE."""
+        """Proposition ACCEPTÉE du transporteur `tr`; la demande est LIVRÉE si livree=True, sinon ANNULÉE
+        (donc non facturable: seules les demandes assignées / en cours / livrées le sont, cf. STATUTS_FACTURABLES)."""
         now = timezone.now()
         demande = DemandeTransport.objects.create(
             pme=self.pme, origin="Tunis", destination="Sfax", weight=1000, cargo_type="Palettes",
             pickup_date=now + timedelta(days=2), delivery_date=now + timedelta(days=3),
-            status=DemandeTransport.Status.DELIVERED if livree else DemandeTransport.Status.ASSIGNED)
+            status=DemandeTransport.Status.DELIVERED if livree else DemandeTransport.Status.CANCELLED)
         return Proposition.objects.create(demande=demande, transporteur=self.tr, vehicle=self.vehicle,
                                           price=Decimal(prix), estimated_duration=6,
                                           status=Proposition.Status.ACCEPTED)
@@ -287,7 +288,7 @@ class WebTests(Base, TestCase):
             "montant_ht": "450.00", "taux_tva": "19", "date_echeance": str(self.echeance()), "notes": ""})
         f = Facture.objects.get()
         self.assertRedirects(rep, reverse("factures:detail", args=[f.pk]))
-        self.assertContains(self.client.get(reverse("factures:detail", args=[f.pk])), "535.50")
+        self.assertContains(self.client.get(reverse("factures:detail", args=[f.pk])), "535,50")
 
     def test_creation_refusee_si_pas_livree_ou_pas_a_soi(self):
         self.client.force_login(self.u_tr)

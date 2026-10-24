@@ -4,7 +4,7 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-start mb-3">
   <div>
-    <h3 class="mb-1">{{ d.origin }} → {{ d.destination }}</h3>
+    <h1 class="h3 mb-1">{{ d.origin }} → {{ d.destination }}</h1>
     <span class="badge {{ d.badge_class }}">{{ d.get_status_display }}</span>
     <span class="text-muted small ms-2">par {{ d.pme }}</span>
   </div>
@@ -30,7 +30,7 @@
 
   <div class="col-md-4">
     <div class="card"><div class="card-body">
-      <h6>Propositions actives : {{ nb_propositions }}</h6>
+      <h2 class="h6">Propositions actives : {{ nb_propositions }}</h2>
             <a class="btn btn-outline-info w-100 mb-2" href="{% url 'meteo:detail' d.pk %}">Météo du trajet</a>
       {% if est_proprietaire %}
         {% if nb_propositions %}
@@ -58,6 +58,15 @@
         {% endif %}
       {% endif %}
     </div></div>
+    {% if estimation %}
+    <div class="card mt-3 ia-panel"><div class="card-body">
+      <h2 class="h6">Estimation IA du prix</h2>
+      <p class="mb-1"><strong class="fs-5">{{ estimation.prix }} TND</strong>
+        <span class="text-muted">(fourchette {{ estimation.bas }} – {{ estimation.haut }} TND)</span></p>
+      <p class="small text-muted mb-0">≈ {{ estimation.prix_km }} TND/km · catégorie {{ estimation.categorie }}.
+        <a href="{% url 'ia:modele' %}">Fiabilité du modèle</a></p>
+    </div></div>
+    {% endif %}
   </div>
 </div>
 {% endblock %}

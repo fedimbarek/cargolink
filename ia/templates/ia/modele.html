@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Modèle d'estimation de prix (IA) - CargoLink{% endblock %}
+{% block content %}
+<h1 class="h3 mb-1">Estimation de prix par intelligence artificielle</h1>
+<p class="text-muted">Modèle de régression (scikit-learn) qui estime le prix d'un transport à partir de la distance,
+du poids, du volume, du type de marchandise et de l'urgence. Il alimente trois écrans : l'estimation de budget à la
+création d'une demande, le prix conseillé pour le transporteur, et la colonne « vs marché » de la comparaison des offres.</p>
+
+{% if not m %}
+  <div class="alert alert-warning" role="alert">Le modèle n'a pas encore été entraîné :
+    <code>python manage.py train_price_model</code></div>
+{% else %}
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3"><div class="card h-100"><div class="card-body">
+    <h2 class="h6">Modèle retenu</h2><p class="fs-5 mb-0">{{ m.retenu }}</p></div></div></div>
+  <div class="col-6 col-md-3"><div class="card h-100"><div class="card-body">
+    <h2 class="h6">R² (test)</h2><p class="fs-5 mb-0">{{ m.test_retenu.r2 }}</p></div></div></div>
+  <div class="col-6 col-md-3"><div class="card h-100"><div class="card-body">
+    <h2 class="h6">Erreur moyenne (MAE)</h2><p class="fs-5 mb-0">{{ m.test_retenu.mae }} TND</p></div></div></div>
+  <div class="col-6 col-md-3"><div class="card h-100"><div class="card-body">
+    <h2 class="h6">Erreur relative (MAPE)</h2><p class="fs-5 mb-0">{{ m.test_retenu.mape }} %</p></div></div></div>
+</div>
+
+<h2 class="h5">Comparaison des modèles</h2>
+<p class="small text-muted">Validation croisée à 5 plis sur l'entraînement, puis évaluation sur un jeu de test jamais vu
+({{ m.donnees.test }} lignes). Le RMSE de validation croisée est calculé sur le logarithme du prix.</p>
+<div class="table-responsive"><table class="table bg-white align-middle">
+<caption class="visually-hidden">Comparaison des modèles de régression</caption>
+<thead><tr><th scope="col">Modèle</th><th scope="col">CV RMSE (log)</th><th scope="col">CV R²</th>
+<th scope="col">MAE (TND)</th><th scope="col">RMSE (TND)</th><th scope="col">R² test</th><th scope="col">MAPE %</th></tr></thead>
+<tbody>{% for r in m.modeles %}
+<tr {% if r.nom == m.retenu %}class="table-success"{% endif %}><th scope="row">{{ r.nom }}{% if r.nom == m.retenu %} <span class="badge bg-success">retenu</span>{% endif %}</th>
+<td>{{ r.cv_rmse_log }}</td><td>{{ r.cv_r2 }}</td><td>{{ r.test_mae }}</td><td>{{ r.test_rmse }}</td><td>{{ r.test_r2 }}</td><td>{{ r.test_mape }}</td></tr>
+{% endfor %}</tbody></table></div>
+
+<div class="row g-3">
+  <div class="col-md-6">
+    <h2 class="h5">Fourchette de prix</h2>
+    <p>Intervalle de prédiction à {% widthratio m.intervalle.niveau 1 100 %} % (méthode « split conformal »).
+    Couverture réelle mesurée sur le test : <strong>{% widthratio m.intervalle.couverture_test 1 100 %} %</strong>.</p>
+    <h2 class="h5">Performance</h2>
+    <p>Latence d'inférence : <strong>{{ m.latence.moyenne_ms }} ms</strong> en moyenne (p95 : {{ m.latence.p95_ms }} ms).
+    Le modèle est chargé une fois en mémoire ; seul le calcul de distance (API externe) est lent et peut être
+    déporté dans Celery/Redis.</p>
+    <h2 class="h5">Données</h2>
+    <p>{{ m.donnees.synthetiques }} lignes synthétiques + {{ m.donnees.reelles }} propositions réellement acceptées.
+    Entraîné le {{ m.entraine_le }} (scikit-learn {{ m.sklearn }}).</p>
+    {% if m.importances %}
+    <h2 class="h5">Importance des variables</h2>
+    <ul class="list-unstyled">
+    {% for nom, v in m.importances.items %}
+      <li class="mb-1">{{ nom }} — {% widthratio v 1 100 %} %
+        <div class="progress" role="img" aria-label="{{ nom }} : {% widthratio v 1 100 %} %"><div class="progress-bar" style="width: {% widthratio v 1 100 %}%"></div></div></li>
+    {% endfor %}</ul>{% endif %}
+  </div>
+  <div class="col-md-6">
+    <h2 class="h5">Prix réel vs prédit</h2>
+    <img class="img-fluid bg-white border rounded" src="{% static 'ia/pred_vs_reel.png' %}"
+         alt="Nuage de points du prix réel en abscisse et du prix prédit en ordonnée sur le jeu de test ; les points suivent de près la diagonale de prédiction parfaite.">
+  </div>
+</div>
+{% endif %}
+{% endblock %}
