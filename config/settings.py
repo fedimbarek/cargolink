@@ -71,7 +71,8 @@ INSTALLED_APPS = [
     'evaluations',
     'meteo',
     'factures',
-    'ia',            # intelligence artificielle: estimation du prix (machine learning)
+    'ia',   
+    'reclamations'         # intelligence artificielle: estimation du prix (machine learning)
 ]
 
 MIDDLEWARE = [

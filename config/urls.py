@@ -44,6 +44,7 @@ urlpatterns = [
     path('api/reservations/', include('reservations.urls')),
     path('api/evaluations/', include('evaluations.urls')),
     path('api/factures/', include('factures.urls')),
+    path("reclamations/", include("reclamations.urls")),
 
 ]
 
