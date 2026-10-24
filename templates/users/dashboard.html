@@ -2,13 +2,13 @@
 {% block title %}Dashboard - CargoLink{% endblock %}
 
 {% block content %}
-<h3 class="mb-4">Bonjour {{ user.username }} 👋</h3>
+<h1 class="h3 mb-4">Bonjour {{ user.username }} <span aria-hidden="true">👋</span></h1>
 
 {% if user.role == "PME" %}
   <div class="row g-3">
     <div class="col-md-4">
       <div class="card h-100"><div class="card-body">
-        <h5>Mes demandes de transport</h5>
+        <h2 class="h5">Mes demandes de transport</h2>
         <p class="text-muted">Publier et gérer vos demandes.</p>
         <a class="btn btn-primary btn-sm" href="{% url 'annonces:liste' %}">Mes demandes</a>
         <a class="btn btn-outline-primary btn-sm" href="{% url 'annonces:creer' %}">+ Nouvelle</a>
@@ -16,14 +16,14 @@
     </div>
     <div class="col-md-4">
       <div class="card h-100"><div class="card-body">
-        <h5>Propositions reçues</h5>
+        <h2 class="h5">Propositions reçues</h2>
         <p class="text-muted">Comparer et choisir un transporteur.</p>
         <a class="btn btn-primary btn-sm" href="{% url 'propositions:recues' %}">Voir les offres</a>
       </div></div>
     </div>
     <div class="col-md-4">
       <div class="card h-100"><div class="card-body">
-        <h5>Factures</h5>
+        <h2 class="h5">Factures</h2>
         <p class="text-muted">Consulter les factures et leurs paiements.</p>
         <a class="btn btn-primary btn-sm" href="{% url 'factures:liste' %}">Mes factures</a>
       </div></div>
@@ -39,7 +39,7 @@
   <div class="row g-3">
     <div class="col-md-4">
       <div class="card h-100"><div class="card-body">
-        <h5>Demandes disponibles</h5>
+        <h2 class="h5">Demandes disponibles</h2>
         <p class="text-muted">Consulter et filtrer les demandes.</p>
         <a class="btn btn-primary btn-sm" href="{% url 'annonces:liste' %}">Demandes</a>
         <a class="btn btn-outline-primary btn-sm" href="{% url 'propositions:matching' %}">Matching</a>
@@ -47,7 +47,7 @@
     </div>
     <div class="col-md-4">
       <div class="card h-100"><div class="card-body">
-        <h5>Mes véhicules et propositions</h5>
+        <h2 class="h5">Mes véhicules et propositions</h2>
         <p class="text-muted">Gérer vos véhicules, faire des offres.</p>
         <a class="btn btn-primary btn-sm" href="{% url 'propositions:vehicules' %}">Véhicules</a>
         <a class="btn btn-outline-primary btn-sm" href="{% url 'propositions:mes_propositions' %}">Mes propositions</a>
@@ -55,7 +55,7 @@
     </div>
     <div class="col-md-4">
       <div class="card h-100"><div class="card-body">
-        <h5>Facturation</h5>
+        <h2 class="h5">Facturation</h2>
         <p class="text-muted">Facturer les missions livrées, suivre les paiements.</p>
         <a class="btn btn-primary btn-sm" href="{% url 'factures:liste' %}">Mes factures</a>
       </div></div>
@@ -64,7 +64,7 @@
 
 {% else %}
   <div class="card"><div class="card-body">
-    <h5>Espace administrateur</h5>
+    <h2 class="h5">Espace administrateur</h2>
     <p class="text-muted">Valider les transporteurs, gérer les utilisateurs.</p>
     <a class="btn btn-primary" href="/admin/">Ouvrir l'administration</a>
   </div></div>

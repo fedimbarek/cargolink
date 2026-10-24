@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Installer les dépendances
+        run: pip install -r requirements-dev.txt
+      - name: Vérifications Django
+        run: python manage.py check
+      - name: Migrations à jour ?
+        run: python manage.py makemigrations --check --dry-run
+      - name: Tests + couverture
+        run: |
+          coverage run manage.py test
+          coverage report --fail-under=75
+          coverage xml
+      - name: Vérification de déploiement (DEBUG=False)
+        env:
+          DEBUG: "False"
+          SECRET_KEY: ci-secret-key-not-used-in-prod
+          ALLOWED_HOSTS: cargolink.onrender.com
+          SECURE_HSTS_PRELOAD: "True"
+        run: python manage.py check --deploy --fail-level WARNING
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage-xml
+          path: coverage.xml

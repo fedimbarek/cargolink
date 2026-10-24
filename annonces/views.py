@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
 from users.decorators import role_required
+from ia.ml import estimer_demande
 from users.models import PME
 
 from .forms import DemandeFilterForm, DemandeForm
@@ -104,6 +105,7 @@ def detail(request, pk):
         "d": demande, "est_proprietaire": est_proprietaire, "ma_proposition": ma_proposition,
         "peut_proposer": peut_proposer,
         "nb_propositions": demande.propositions.filter(status__in=["PENDING", "ACCEPTED"]).count(),
+        "estimation": estimer_demande(demande),
     })
 
 

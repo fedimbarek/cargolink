@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
 from annonces.models import DemandeTransport
+from ia.ml import estimer_demande, verdict
 from users.decorators import role_required
 
 from .forms import PropositionForm, VehicleForm
@@ -77,7 +78,8 @@ def proposer(request, demande_id):
         else:
             messages.success(request, "Proposition envoyée.")
         return redirect("annonces:detail", pk=demande.pk)
-    return render(request, "propositions/proposer.html", {"form": form, "d": demande})
+    return render(request, "propositions/proposer.html",
+                  {"form": form, "d": demande, "estimation": estimer_demande(demande)})
 
 
 @role_required("TRANSPORTEUR")
@@ -118,7 +120,11 @@ def propositions_recues(request):
 @role_required("PME")
 def comparer_propositions(request, demande_id):
     demande = get_object_or_404(DemandeTransport, pk=demande_id, pme__user=request.user)
-    return render(request, "propositions/comparer.html", {"d": demande, "lignes": comparer(demande)})
+    estimation = estimer_demande(demande)
+    lignes = comparer(demande)
+    for ligne in lignes:                       # verdict de l'IA: l'offre est-elle dans le marché ?
+        ligne["marche"] = verdict(ligne["proposition"].price, estimation)
+    return render(request, "propositions/comparer.html", {"d": demande, "lignes": lignes, "estimation": estimation})
 
 
 @role_required("PME")

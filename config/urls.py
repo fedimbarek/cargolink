@@ -37,11 +37,17 @@ urlpatterns = [
     path('propositions/', include('propositions.web_urls')),
     path('meteo/', include('meteo.web_urls')),
     path('factures/', include('factures.web_urls')),
+    path('ia/', include('ia.web_urls')),
     path('api/auth/', include('users.urls')),
     path('api/annonces/', include('annonces.urls')),
     path('api/propositions/', include('propositions.urls')),
     path('api/reservations/', include('reservations.urls')),
     path('api/evaluations/', include('evaluations.urls')),
     path('api/factures/', include('factures.urls')),
-    path('reclamations/', include('reclamations.urls')),
+
 ]
+
+# pages d'erreur personnalisées (actives quand DEBUG=False)
+handler403 = 'config.error_views.erreur_403'
+handler404 = 'config.error_views.erreur_404'
+handler500 = 'config.error_views.erreur_500'

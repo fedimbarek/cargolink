@@ -1,0 +1,39 @@
+{
+  "entraine_le": "2026-10-23T11:07:53+00:00",
+  "sklearn": "1.9.1",
+  "donnees": {
+    "synthetiques": 2000,
+    "reelles": 0,
+    "train": 1400,
+    "calibration": 300,
+    "test": 300
+  },
+  "retenu": "Gradient Boosting",
+  "test_retenu": {
+    "mae": 23.52,
+    "rmse": 38.56,
+    "r2": 0.9713,
+    "mape": 8.57
+  },
+  "modeles": [],
+  "intervalle": {
+    "niveau": 0.9,
+    "couverture_test": 0.92,
+    "q_bas": -0.172,
+    "q_haut": 0.1858
+  },
+  "importances": {
+    "distance_km": 0.762,
+    "weight": 0.1042,
+    "volume": 0.0729,
+    "cat_GENERAL": 0.0328,
+    "cat_DANGEREUX": 0.0113,
+    "urgent": 0.0088,
+    "cat_FRIGO": 0.0055,
+    "cat_FRAGILE": 0.0026
+  },
+  "latence": {
+    "moyenne_ms": 0.33,
+    "p95_ms": 0.36
+  }
+}

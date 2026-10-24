@@ -3,12 +3,14 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <h3 class="mb-0">Offres pour {{ d.origin }} → {{ d.destination }}</h3>
+  <h1 class="h3 mb-0">Offres pour {{ d.origin }} → {{ d.destination }}</h1>
   <a class="btn btn-outline-secondary" href="{% url 'annonces:detail' d.pk %}">← Retour</a>
 </div>
+{% if estimation %}<p class="small">Prix du marché estimé par l'IA : <strong>{{ estimation.prix }} TND</strong> (fourchette {{ estimation.bas }} – {{ estimation.haut }}).</p>{% endif %}
 <p class="text-muted">Score /100 = 50 % prix + 30 % note du transporteur + 20 % durée.</p>
-<table class="table bg-white align-middle">
-  <thead><tr><th>Transporteur</th><th>Véhicule</th><th>Prix</th><th>≈ EUR</th><th>Prix/km</th><th>Durée</th><th>Note</th><th>Score</th><th>Statut</th><th></th></tr></thead>
+<div class="table-responsive"><table class="table bg-white align-middle">
+<caption class="visually-hidden">Comparaison des offres</caption>
+  <thead><tr><th scope="col">Transporteur</th><th scope="col">Véhicule</th><th scope="col">Prix</th><th scope="col">Vs marché (IA)</th><th scope="col">≈ EUR</th><th scope="col">Prix/km</th><th scope="col">Durée</th><th scope="col">Note</th><th scope="col">Score</th><th scope="col">Statut</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr></thead>
   <tbody>
   {% for l in lignes %}
     {% with p=l.proposition %}
@@ -17,6 +19,7 @@
         {% if p.message %}<div class="small text-muted">{{ p.message }}</div>{% endif %}</td>
       <td>{{ p.vehicle.registration_number }}</td>
       <td>{{ p.price }} TND</td>
+      <td>{% if l.marche %}<span class="badge {{ l.marche.2 }}">{{ l.marche.1 }}</span>{% else %}-{% endif %}</td>
       <td>{% if l.prix_eur %}{{ l.prix_eur }} €{% else %}-{% endif %}</td>
       <td>{% if l.prix_km %}{{ l.prix_km }}{% else %}-{% endif %}</td>
       <td>{{ p.estimated_duration }} h</td>
@@ -33,8 +36,8 @@
     </tr>
     {% endwith %}
   {% empty %}
-    <tr><td colspan="10" class="text-center text-muted py-4">Aucune proposition pour le moment.</td></tr>
+    <tr><td colspan="11" class="text-center text-muted py-4">Aucune proposition pour le moment.</td></tr>
   {% endfor %}
   </tbody>
-</table>
+</table></div>
 {% endblock %}
