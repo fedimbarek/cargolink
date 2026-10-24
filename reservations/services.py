@@ -98,8 +98,6 @@ def creer_reservation(proposition):
             "nom_contact": proposition.demande.pme.user.username,
             "email_contact": proposition.demande.pme.user.email,
             "nom_societe": proposition.demande.pme.company_name,
-            "matricule": proposition.demande.pme.registration_number,
-            "adresse": proposition.demande.pme.address,
             "telephone": proposition.demande.pme.phone,
         },
     )

@@ -21,8 +21,6 @@ class Reservation(models.Model):
     nom_contact = models.CharField("Nom du contact", max_length=150)
     email_contact = models.EmailField("Email de contact")
     nom_societe = models.CharField("Société", max_length=150)
-    matricule = models.CharField("Matricule / registre", max_length=50, blank=True)
-    adresse = models.CharField("Adresse", max_length=255, blank=True)
     telephone = models.CharField("Téléphone", max_length=20, blank=True)
     status = models.CharField(max_length=10, choices=Status.choices, default=Status.CONFIRMEE)
     created_at = models.DateTimeField(auto_now_add=True)

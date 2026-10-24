@@ -69,6 +69,7 @@ def analyser_notifications(notifications):
         notification.priorite_ia = priorite
         notification.libelle_priorite_ia = LIBELLES_PRIORITE[priorite]
         notification.confiance_ia = confiance
+        notification.confiance_pourcentage_ia = round(confiance * 100)
         if confiance < 0.45:
             notification.conseil_ia = (
                 "L’assistant hésite sur la catégorie. Vérifiez le message et "

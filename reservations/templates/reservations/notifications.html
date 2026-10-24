@@ -36,7 +36,7 @@
                 </span>
               </div>
               <p class="mb-1">{{ n.conseil_ia }}</p>
-              <small class="text-muted">Confiance estimée : {{ n.confiance_ia|floatformat:0 }} %</small>
+              <small class="text-muted">Confiance estimée : {{ n.confiance_pourcentage_ia }} %</small>
             </aside>
           {% elif not n.lue %}
             <p class="text-muted small mb-0">Le conseil IA apparaîtra après lecture.</p>

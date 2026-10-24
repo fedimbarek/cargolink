@@ -280,6 +280,7 @@ class WebTests(Base, TestCase):
         self.assertContains(reponse, "Assistant IA")
         self.assertContains(reponse, "Priorité : Urgente")
         self.assertContains(reponse, "À traiter rapidement")
+        self.assertContains(reponse, "Confiance estimée : 95 %")
         modele.predict.assert_called_once_with([notification.message])
 
     @patch("ml.service._charger_modele")

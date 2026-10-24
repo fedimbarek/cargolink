@@ -50,13 +50,13 @@ class AccepterPropositionTests(TestCase):
 
         self.assertContains(response, "Entreprise initiale")
         self.assertContains(response, "pme@example.test")
+        self.assertNotContains(response, "Matricule / registre")
+        self.assertNotContains(response, ">Adresse<")
 
         response = self.client.post(url, {
             "nom_contact": "Nouveau contact",
             "email_contact": "contact@example.test",
             "nom_societe": "Nouvelle entreprise",
-            "matricule": "REG-2",
-            "adresse": "Sousse",
             "telephone": "22222222",
         })
 
@@ -68,7 +68,6 @@ class AccepterPropositionTests(TestCase):
         self.assertEqual(reservation.nom_contact, "Nouveau contact")
         self.assertEqual(reservation.email_contact, "contact@example.test")
         self.assertEqual(reservation.nom_societe, "Nouvelle entreprise")
-        self.assertEqual(reservation.adresse, "Sousse")
         self.assertEqual(reservation.telephone, "22222222")
         notification = self.carrier_user.notifications_suivi.get()
         self.assertIn("Statut : proposition confirmée", notification.message)
