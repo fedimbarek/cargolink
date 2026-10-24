@@ -44,10 +44,10 @@ def test_creation_via_form(client):
 
 @pytest.mark.django_db
 def test_client_ne_voit_que_ses_reclamations(client):
-    u1 = User.objects.create_user(username='u1', password='pass')
-    u2 = User.objects.create_user(username='u2', password='pass')
-    Reclamation.objects.create(utilisateur=u1, sujet='Recu1', description='...')
-    Reclamation.objects.create(utilisateur=u2, sujet='Recu2', description='...')
+    u1 = User.objects.create_user(username='u1', email='u1@test.com', password='pass', role='TRANSPORTEUR')
+    u2 = User.objects.create_user(username='u2', email='u2@test.com', password='pass', role='TRANSPORTEUR')
+    Reclamation.objects.create(utilisateur=u1, destinataire=u1, sujet='Recu1', description='...')
+    Reclamation.objects.create(utilisateur=u2, destinataire=u2, sujet='Recu2', description='...')
     client.force_login(u1)
     response = client.get(reverse('reclamations:liste'))
     assert response.status_code == 200

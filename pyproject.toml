@@ -27,4 +27,9 @@ dependencies = [
 dev = [
     "coverage>=7.16",
     "matplotlib>=3.9",
+    "pytest>=9.1.1",
+    "pytest-django>=4.14.0",
 ]
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
+python_files = ["tests.py", "test_*.py"]
