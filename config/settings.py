@@ -139,11 +139,17 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 
-# Brevo Transactional Email API
-BREVO_API_KEY = os.environ.get("BREVO_API_KEY", "")
-BREVO_SENDER_EMAIL = os.environ.get("BREVO_SENDER_EMAIL", "")
-BREVO_SENDER_NAME = os.environ.get("BREVO_SENDER_NAME", "CargoLink")
-SITE_URL = os.environ.get("SITE_URL", "http://127.0.0.1:8000")
+# settings.py
+import os
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv("oussemasaidani147@gmail.com")          # ton.email@gmail.com
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")  # mot de passe d'application (16 caractères)
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SITE_URL = os.getenv("SITE_URL", "http://127.0.0.1:8000")
 
 
 # --- CargoLink ---

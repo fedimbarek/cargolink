@@ -10,23 +10,45 @@
 </div>
 <ul class="list-group" aria-label="Liste des notifications">
   {% for n in notifications %}
-    <li class="list-group-item p-0 d-flex align-items-stretch">
-      <form method="post" action="{% url 'reservations:notification_ouvrir' n.pk %}" class="m-0 flex-grow-1">
-        {% csrf_token %}
-        <button type="submit" aria-label="Ouvrir et marquer comme lue : {{ n.message }}"
-                class="btn btn-link text-start text-decoration-none text-reset w-100 h-100 d-flex justify-content-between align-items-center {% if not n.lue %}fw-bold{% endif %}">
-          <span>
-            <span class="visually-hidden">{% if n.lue %}Lue : {% else %}Non lue : {% endif %}</span>
-            {{ n.message }}
-            {% if n.transporteur_id %}<span class="badge bg-secondary ms-2">Transporteur #{{ n.transporteur_id }}</span>{% endif %}
-          </span>
-          <time class="small text-muted ms-3 text-nowrap" datetime="{{ n.created_at|date:'c' }}">{{ n.created_at|date:"d/m H:i" }}</time>
-        </button>
-      </form>
-      <form method="post" action="{% url 'reservations:notification_supprimer' n.pk %}" class="m-0 d-flex align-items-center p-2">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
-      </form>
+    <li class="list-group-item">
+      <div class="row g-3 align-items-center">
+        <div class="col-12 col-md-7">
+          <form method="post" action="{% url 'reservations:notification_ouvrir' n.pk %}" class="m-0">
+            {% csrf_token %}
+            <button type="submit" aria-label="Ouvrir et marquer comme lue : {{ n.message }}"
+                    class="btn btn-link text-start text-decoration-none text-reset w-100 {% if not n.lue %}fw-bold{% endif %}">
+              <span>
+                <span class="visually-hidden">{% if n.lue %}Lue : {% else %}Non lue : {% endif %}</span>
+                {{ n.message }}
+                {% if n.transporteur_id %}<span class="badge bg-secondary ms-2">Transporteur #{{ n.transporteur_id }}</span>{% endif %}
+              </span>
+              <time class="small text-muted ms-2 text-nowrap" datetime="{{ n.created_at|date:'c' }}">{{ n.created_at|date:"d/m H:i" }}</time>
+            </button>
+          </form>
+        </div>
+        <div class="col-12 col-md-4">
+          {% if n.lue and n.conseil_ia %}
+            <aside class="rounded bg-light p-3" aria-label="Conseil de l’assistant IA">
+              <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
+                <strong>Assistant IA</strong>
+                <span class="badge {% if n.priorite_ia == 'urgent' %}bg-danger{% elif n.priorite_ia == 'normal' %}bg-primary{% else %}bg-secondary{% endif %}">
+                  Priorité : {{ n.libelle_priorite_ia }}
+                </span>
+              </div>
+              <p class="mb-1">{{ n.conseil_ia }}</p>
+              <small class="text-muted">Confiance estimée : {{ n.confiance_ia|floatformat:0 }} %</small>
+            </aside>
+          {% elif not n.lue %}
+            <p class="text-muted small mb-0">Le conseil IA apparaîtra après lecture.</p>
+          {% endif %}
+        </div>
+        <div class="col-12 col-md-1 text-md-end">
+          <form method="post" action="{% url 'reservations:notification_supprimer' n.pk %}" class="m-0">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
+          </form>
+        </div>
+      </div>
     </li>
   {% empty %}
     <li class="list-group-item alert alert-info mb-0">Aucune notification.</li>

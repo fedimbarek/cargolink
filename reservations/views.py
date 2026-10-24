@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 
+from ml.service import ErreurAssistantIA, analyser_notifications
 from users.decorators import role_required
 
 from . import services
@@ -91,7 +92,11 @@ def annuler(request, pk):
 # ------------------------------------------------------------ notifications
 @login_required
 def notifications(request):
-    notifs = request.user.notifications_suivi.all()[:100]
+    notifs = list(request.user.notifications_suivi.all()[:100])
+    try:
+        analyser_notifications(notifs)
+    except ErreurAssistantIA:
+        messages.warning(request, "L’assistant IA est indisponible ; les notifications restent accessibles.")
     return render(request, "reservations/notifications.html", {"notifications": notifs})
 
 

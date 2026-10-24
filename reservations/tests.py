@@ -9,6 +9,7 @@ from rest_framework.test import APITestCase
 
 from annonces.models import DemandeTransport
 from evaluations.services import ErreurEvaluation, evaluer
+from ml.service import analyser_notifications
 from propositions.models import Proposition, Vehicle
 from propositions.services import accepter_proposition
 from users.models import PME, Transporteur, User
@@ -113,6 +114,36 @@ class ServicesTests(Base, TestCase):
         self.assertTrue(self.u_tr.notifications_suivi.exists())
         self.assertTrue(self.u_pme.notifications_suivi.exists())
         self.assertFalse(Reservation.objects.filter(proposition=self.p2).exists())
+
+    def test_modele_classe_une_notification_urgente_et_fournit_un_conseil(self):
+        notifications = [
+            Notification(
+                user=self.u_tr,
+                message="Suivi monastir → Tunis : incident / retard - le camion est bloqué.",
+                lue=True,
+            ),
+            Notification(
+                user=self.u_tr,
+                message="Nouvelle proposition reçue pour votre demande #8.",
+                lue=True,
+            ),
+            Notification(
+                user=self.u_tr,
+                message="Votre réservation #3 pour monastir → Tunis (7.00 kg) est confirmée.",
+                lue=True,
+            ),
+        ]
+
+        analyser_notifications(notifications)
+
+        self.assertEqual(
+            [notification.priorite_ia for notification in notifications],
+            ["urgent", "normal", "info"],
+        )
+        self.assertTrue(all(notification.confiance_ia >= 0.45 for notification in notifications))
+        self.assertIn("rapidement", notifications[0].conseil_ia)
+        self.assertIn("consultez", notifications[1].conseil_ia)
+        self.assertIn("Aucune action urgente", notifications[2].conseil_ia)
 
     def test_cycle_complet_et_evaluation(self):
         services.demarrer(self.r, localisation="Tunis")
@@ -225,6 +256,41 @@ class WebTests(Base, TestCase):
         notifications = self.client.get(reverse("reservations:notifications"))
         self.assertContains(notifications, '<ul class="list-group" aria-label="Liste des notifications">')
         self.assertContains(notifications, "Ouvrir et marquer comme lue")
+
+    @patch("ml.service._charger_modele")
+    def test_conseil_ia_s_affiche_a_cote_d_une_notification_lue(self, charger_modele):
+        modele = Mock()
+        modele.classes_ = ["urgent", "normal", "info"]
+        modele.predict.return_value = ["urgent"]
+        modele.predict_proba.return_value = [[0.95, 0.03, 0.02]]
+        charger_modele.return_value = modele
+
+        notification = self.u_tr.notifications_suivi.get()
+        self.client.force_login(self.u_tr)
+
+        reponse = self.client.post(
+            reverse("reservations:notification_ouvrir", args=[notification.pk])
+        )
+        self.assertRedirects(reponse, reverse("reservations:detail", args=[self.r.pk]))
+        notification.refresh_from_db()
+        self.assertTrue(notification.lue)
+
+        reponse = self.client.get(reverse("reservations:notifications"))
+
+        self.assertContains(reponse, "Assistant IA")
+        self.assertContains(reponse, "Priorité : Urgente")
+        self.assertContains(reponse, "À traiter rapidement")
+        modele.predict.assert_called_once_with([notification.message])
+
+    @patch("ml.service._charger_modele")
+    def test_notification_non_lue_n_est_pas_analysee(self, charger_modele):
+        self.client.force_login(self.u_tr)
+
+        reponse = self.client.get(reverse("reservations:notifications"))
+
+        self.assertContains(reponse, "Le conseil IA apparaîtra après lecture.")
+        self.assertNotContains(reponse, "Priorité :")
+        charger_modele.assert_not_called()
 
     def test_seul_le_transporteur_demarre(self):
         url = reverse("reservations:demarrer", args=[self.r.pk])
