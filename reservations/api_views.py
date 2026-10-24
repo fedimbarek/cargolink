@@ -34,6 +34,13 @@ class NotificationSerializer(serializers.ModelSerializer):
         fields = ["id", "message", "lien", "lue", "created_at"]
 
 
+class ReservationActionSerializer(serializers.Serializer):
+    type = serializers.ChoiceField(choices=services.ETAPES_INTERMEDIAIRES, required=False)
+    commentaire = serializers.CharField(required=False, allow_blank=True, max_length=255)
+    localisation = serializers.CharField(required=False, allow_blank=True, max_length=150)
+    motif = serializers.CharField(required=False, allow_blank=True, max_length=255)
+
+
 class ReservationListe(generics.ListAPIView):
     serializer_class = ReservationSerializer
 
@@ -65,8 +72,11 @@ def reservation_action(request, pk, action):
     est_transporteur = r.transporteur.user_id == request.user.id
     if not est_transporteur and not (action == "annuler" and r.pme.user_id == request.user.id):
         return Response({"detail": "Action réservée au transporteur."}, status=status.HTTP_403_FORBIDDEN)
+    donnees = ReservationActionSerializer(data=request.data)
+    if not donnees.is_valid():
+        return Response(donnees.errors, status=status.HTTP_400_BAD_REQUEST)
     try:
-        ACTIONS[action](r, request.data, request.user)
+        ACTIONS[action](r, donnees.validated_data, request.user)
     except services.ErreurReservation as e:
         return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
     r.refresh_from_db()

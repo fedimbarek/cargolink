@@ -81,10 +81,37 @@ class ServicesTests(Base, TestCase):
             envoyer.call_args.kwargs["json"]["textContent"],
         )
 
+    def test_creation_reservation_envoie_confirmation_a_la_pme(self):
+        reponse_api = Mock()
+        with self.settings(
+            BREVO_API_KEY="cle-test",
+            BREVO_SENDER_EMAIL="notifications@example.com",
+            SITE_URL="https://cargolink.example",
+        ), patch("reservations.services.requests.post", return_value=reponse_api) as envoyer:
+            with self.captureOnCommitCallbacks(execute=True):
+                reservation = services.creer_reservation(self.p2)
+
+        appels = [appel.kwargs["json"] for appel in envoyer.call_args_list]
+        email_pme = next(
+            email for email in appels
+            if email["to"][0]["email"] == self.u_pme.email
+        )
+        self.assertEqual(len(appels), 1)
+        self.assertEqual(email_pme["subject"], "Confirmation de votre réservation CargoLink")
+        self.assertIn(f"réservation #{reservation.pk}", email_pme["textContent"])
+        self.assertIn(
+            f"https://cargolink.example/reservations/{reservation.pk}/",
+            email_pme["textContent"],
+        )
+        self.assertTrue(self.u_pme.notifications_suivi.filter(
+            message__contains=f"réservation #{reservation.pk}"
+        ).exists())
+
     def test_acceptation_cree_reservation_et_notifie(self):
         self.assertEqual(self.r.status, Reservation.Status.CONFIRMEE)
         self.assertEqual(self.r.etapes.count(), 1)
         self.assertTrue(self.u_tr.notifications_suivi.exists())
+        self.assertTrue(self.u_pme.notifications_suivi.exists())
         self.assertFalse(Reservation.objects.filter(proposition=self.p2).exists())
 
     def test_cycle_complet_et_evaluation(self):
@@ -152,6 +179,53 @@ class WebTests(Base, TestCase):
         self.assertEqual(self.client.post(url_autre_user).status_code, 404)
         self.assertTrue(Notification.objects.filter(pk=notification_pme.pk).exists())
 
+    def test_ouvrir_notification_marque_comme_lue_et_refuse_une_redirection_externe(self):
+        notification = self.u_tr.notifications_suivi.get()
+        self.client.force_login(self.u_tr)
+
+        reponse = self.client.post(
+            reverse("reservations:notification_ouvrir", args=[notification.pk])
+        )
+
+        self.assertRedirects(reponse, reverse("reservations:detail", args=[self.r.pk]))
+        notification.refresh_from_db()
+        self.assertTrue(notification.lue)
+
+        notification.lien = "https://example.org/"
+        notification.save(update_fields=["lien"])
+        reponse = self.client.post(
+            reverse("reservations:notification_ouvrir", args=[notification.pk])
+        )
+        self.assertRedirects(reponse, reverse("reservations:notifications"))
+
+    def test_actions_notification_exigent_post_et_csrf(self):
+        notification = self.u_tr.notifications_suivi.get()
+        client = self.client_class(enforce_csrf_checks=True)
+        client.force_login(self.u_tr)
+
+        reponse = client.post(
+            reverse("reservations:notification_supprimer", args=[notification.pk])
+        )
+
+        self.assertEqual(reponse.status_code, 403)
+        self.assertTrue(Notification.objects.filter(pk=notification.pk).exists())
+
+    def test_pages_reservation_et_notification_exposent_une_structure_accessible(self):
+        self.client.force_login(self.u_tr)
+
+        liste = self.client.get(reverse("reservations:liste"))
+        self.assertContains(liste, "<h1")
+        self.assertContains(liste, 'for="filtre-statut"')
+        self.assertContains(liste, "<caption")
+
+        detail = self.client.get(reverse("reservations:detail", args=[self.r.pk]))
+        self.assertContains(detail, 'for="demarrer-localisation"')
+        self.assertContains(detail, 'aria-label="Navigation principale"')
+
+        notifications = self.client.get(reverse("reservations:notifications"))
+        self.assertContains(notifications, '<ul class="list-group" aria-label="Liste des notifications">')
+        self.assertContains(notifications, "Ouvrir et marquer comme lue")
+
     def test_seul_le_transporteur_demarre(self):
         url = reverse("reservations:demarrer", args=[self.r.pk])
         self.client.force_login(self.u_pme)
@@ -187,3 +261,34 @@ class ApiTests(Base, APITestCase):
         rep = self.client.post(f"/api/evaluations/reservation/{self.r.pk}/", {"note": 3}, format="json")
         self.assertEqual(rep.status_code, 201)
         self.assertGreater(len(self.client.get("/api/reservations/notifications/").data), 0)
+
+    def test_api_rejette_les_actions_invalides_sans_changer_la_reservation(self):
+        self.client.force_authenticate(self.u_tr)
+
+        reponse = self.client.post(
+            f"/api/reservations/{self.r.pk}/etape/",
+            {"type": "LIVRAISON"},
+            format="json",
+        )
+
+        self.assertEqual(reponse.status_code, 400)
+        self.r.refresh_from_db()
+        self.assertEqual(self.r.status, Reservation.Status.CONFIRMEE)
+        self.assertEqual(self.r.etapes.count(), 1)
+
+        reponse = self.client.post(
+            f"/api/reservations/{self.r.pk}/demarrer/",
+            {"commentaire": "x" * 256},
+            format="json",
+        )
+        self.assertEqual(reponse.status_code, 400)
+        self.r.refresh_from_db()
+        self.assertEqual(self.r.status, Reservation.Status.CONFIRMEE)
+
+    def test_api_limite_les_reservations_et_notifications_a_leur_proprietaire(self):
+        self.client.force_authenticate(self.u_tr2)
+
+        self.assertEqual(self.client.get(f"/api/reservations/{self.r.pk}/").status_code, 404)
+        notifications = self.client.get("/api/reservations/notifications/")
+        self.assertEqual(notifications.status_code, 200)
+        self.assertEqual(notifications.data, [])

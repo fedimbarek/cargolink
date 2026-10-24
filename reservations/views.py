@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 
 from users.decorators import role_required
@@ -100,7 +101,13 @@ def notification_ouvrir(request, pk):
     n = get_object_or_404(Notification, pk=pk, user=request.user)
     n.lue = True
     n.save(update_fields=["lue"])
-    return redirect(n.lien or "reservations:notifications")
+    if url_has_allowed_host_and_scheme(
+        n.lien,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        return redirect(n.lien)
+    return redirect("reservations:notifications")
 
 
 @login_required

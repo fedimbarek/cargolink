@@ -29,7 +29,7 @@ class ErreurReservation(Exception):
     """Règle métier non respectée (message affichable à l'utilisateur)."""
 
 
-def _envoyer_email_notification(email, nom, message, lien):
+def _envoyer_email_notification(email, nom, message, lien, sujet):
     if not settings.BREVO_API_KEY or not settings.BREVO_SENDER_EMAIL:
         logger.warning("Email de notification non envoyé : configuration Brevo manquante.")
         return
@@ -52,7 +52,7 @@ def _envoyer_email_notification(email, nom, message, lien):
                     "email": settings.BREVO_SENDER_EMAIL,
                 },
                 "to": [{"email": email, "name": nom}],
-                "subject": "Nouvelle notification CargoLink",
+                "subject": sujet,
                 "textContent": (
                     f"Bonjour {nom},\n\n"
                     f"Vous avez une nouvelle notification :\n\n{message}\n\n"
@@ -66,19 +66,21 @@ def _envoyer_email_notification(email, nom, message, lien):
         logger.exception("Échec de l'envoi de l'email de notification via Brevo.")
 
 
-def notifier(user, message, lien="", transporteur=None):
+def notifier(user, message, lien="", transporteur=None, *, sujet="Nouvelle notification CargoLink"):
     notification = Notification.objects.create(
         user=user, transporteur=transporteur, message=message[:255], lien=lien
     )
-    transaction.on_commit(
-        lambda: _envoyer_email_notification(
-            user.email,
-            user.get_full_name() or user.username,
-            notification.message,
-            notification.lien,
-        ),
-        robust=True,
-    )
+    if user.role == "PME":
+        transaction.on_commit(
+            lambda: _envoyer_email_notification(
+                user.email,
+                user.get_full_name() or user.username,
+                notification.message,
+                notification.lien,
+                sujet,
+            ),
+            robust=True,
+        )
     return notification
 
 
@@ -103,6 +105,12 @@ def creer_reservation(proposition):
     )
     if cree:
         EtapeSuivi.objects.create(reservation=reservation, type=EtapeSuivi.Type.CONFIRMATION)
+        notifier(
+            reservation.user,
+            f"Votre réservation #{reservation.pk} pour {proposition.demande} est confirmée.",
+            _lien(reservation),
+            sujet="Confirmation de votre réservation CargoLink",
+        )
         notifier(
             proposition.transporteur.user,
             f"Statut : proposition confirmée pour {proposition.demande}.",
