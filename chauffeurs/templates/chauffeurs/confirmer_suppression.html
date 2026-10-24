@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Supprimer un chauffeur{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-4">Supprimer un chauffeur</h1>
+
+<div class="card p-4">
+  <p>
+    Voulez-vous supprimer
+    <strong>{{ chauffeur }}</strong> ?
+  </p>
+
+  <p>Son permis enregistré sera également supprimé.</p>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="d-flex gap-2">
+      <button type="submit" class="btn btn-danger">
+        Confirmer la suppression
+      </button>
+
+      <a
+        href="{% url 'chauffeurs:liste' %}"
+        class="btn btn-outline-secondary"
+      >
+        Annuler
+      </a>
+    </div>
+  </form>
+</div>
+{% endblock %}

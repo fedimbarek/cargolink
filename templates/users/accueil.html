@@ -1,0 +1,540 @@
+{% extends "base.html" %}
+
+{% block title %}CargoLink — Votre transport commence ici{% endblock %}
+
+{% block hero %}{% endblock %}
+
+{% block content %}
+<style>
+  /* Ces styles concernent uniquement la page d'accueil. */
+
+  .workspace:has(.public-home) {
+    padding: 0;
+    margin-top: 28px;
+    overflow: hidden;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .public-home {
+    --blue: #175cda;
+    --dark: #10284c;
+  }
+
+  .landing-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 65px 45px;
+    color: white;
+    background: linear-gradient(120deg, #10284c, #164c9c);
+    border-radius: 26px;
+  }
+
+  .landing-label {
+    display: inline-block;
+    margin-bottom: 22px;
+    padding: 7px 14px;
+    color: #e0ecff;
+    background: rgb(255 255 255 / 10%);
+    border: 1px solid rgb(255 255 255 / 20%);
+    border-radius: 100px;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  .landing-title {
+    max-width: 650px;
+    color: white;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    line-height: 1.12;
+    letter-spacing: -2px;
+  }
+
+  .landing-title span {
+    color: #a9ceff;
+  }
+
+  .landing-description {
+    max-width: 520px;
+    margin: 24px 0;
+    color: #dbe7fa;
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+
+  .landing-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .landing-actions .btn {
+    padding: 13px 22px;
+  }
+
+  .landing-note {
+    margin: 20px 0 0;
+    color: #dbe7fa;
+    font-size: 0.82rem;
+  }
+
+  .journey-card {
+    max-width: 380px;
+    margin-left: auto;
+    padding: 26px;
+    color: var(--dark);
+    background: white;
+    border: 1px solid #e2ebf8;
+    border-radius: 22px;
+    box-shadow: 0 25px 55px rgb(0 0 0 / 15%);
+    transform: rotate(-2deg);
+  }
+
+  .journey-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e7edf6;
+  }
+
+  .journey-heading strong {
+    font-size: 1.05rem;
+  }
+
+  .example-label {
+    padding: 5px 10px;
+    color: #1046ac;
+    background: #eaf1ff;
+    border-radius: 7px;
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+
+  .journey-route {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 0 15px;
+    padding: 25px 0;
+  }
+
+  .journey-point {
+    width: 13px;
+    height: 13px;
+    margin-top: 6px;
+    border: 3px solid var(--blue);
+    border-radius: 50%;
+  }
+
+  .journey-line {
+    height: 36px;
+    margin-left: 5px;
+    border-left: 2px dashed #c3d5ee;
+  }
+
+  .journey-city {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 750;
+  }
+
+  .journey-caption {
+    color: #62738a;
+    font-size: 0.8rem;
+  }
+
+  .journey-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding-top: 18px;
+    border-top: 1px solid #e7edf6;
+  }
+
+  .journey-detail {
+    padding: 12px;
+    background: #f2f6fd;
+    border-radius: 10px;
+  }
+
+  .journey-detail strong {
+    display: block;
+  }
+
+  .journey-detail span {
+    color: #62738a;
+    font-size: 0.75rem;
+  }
+
+  .landing-section {
+    padding-top: 65px;
+  }
+
+  .section-label {
+    margin-bottom: 8px;
+    color: #1046ac;
+    font-size: 0.75rem;
+    font-weight: 750;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+  }
+
+  .section-title {
+    margin-bottom: 12px;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    letter-spacing: -1px;
+  }
+
+  .section-description {
+    max-width: 620px;
+    margin: 0 auto 30px;
+    color: #62738a;
+  }
+
+  .audience-card {
+    height: 100%;
+    padding: 32px;
+    background: white;
+    border: 1px solid #dce5f1;
+    border-radius: 20px;
+  }
+
+  .audience-number {
+    display: inline-grid;
+    place-items: center;
+    width: 45px;
+    height: 45px;
+    margin-bottom: 20px;
+    color: #1046ac;
+    background: #eaf1ff;
+    border-radius: 13px;
+    font-weight: 800;
+  }
+
+  .audience-card h3 {
+    font-size: 1.35rem;
+  }
+
+  .audience-card p,
+  .audience-card li {
+    color: #62738a;
+    font-size: 0.93rem;
+  }
+
+  .audience-card ul {
+    padding-left: 20px;
+    margin: 18px 0 25px;
+  }
+
+  .audience-card li {
+    margin-bottom: 9px;
+  }
+
+  .process-card {
+    height: 100%;
+    padding: 26px;
+    background: white;
+    border: 1px solid #dce5f1;
+    border-radius: 18px;
+  }
+
+  .process-number {
+    margin-bottom: 18px;
+    color: var(--blue);
+    font-size: 1.8rem;
+    font-weight: 800;
+  }
+
+  .process-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .process-card p {
+    margin: 0;
+    color: #62738a;
+    font-size: 0.9rem;
+  }
+
+  .landing-cta {
+    margin-top: 65px;
+    padding: 38px;
+    background: #e8f0ff;
+    border: 1px solid #cedfff;
+    border-radius: 22px;
+  }
+
+  .landing-cta h2 {
+    margin-bottom: 10px;
+    font-size: 1.6rem;
+  }
+
+  .landing-cta p {
+    margin: 0;
+    color: #526580;
+  }
+
+  @media (max-width: 767px) {
+    .landing-hero {
+      padding: 36px 24px;
+    }
+
+    .landing-title {
+      letter-spacing: -1px;
+    }
+
+    .journey-card {
+      margin: 35px auto 0;
+      transform: none;
+    }
+
+    .landing-section {
+      padding-top: 40px;
+    }
+
+    .landing-cta {
+      margin-top: 40px;
+      padding: 26px;
+    }
+  }
+</style>
+
+<div class="public-home">
+
+  <!-- Présentation principale -->
+  <section class="landing-hero" aria-labelledby="titre-accueil">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-7">
+        <span class="landing-label">
+          PME & transporteurs indépendants
+        </span>
+
+        <h1 id="titre-accueil" class="landing-title">
+          Votre marchandise.<br>
+          Le bon transporteur.<br>
+          <span>Un trajet simplifié.</span>
+        </h1>
+
+        <p class="landing-description">
+          CargoLink met en relation les entreprises et les transporteurs.
+          Publiez votre besoin, comparez les propositions et préparez
+          votre transport depuis un même espace.
+        </p>
+
+        <div class="landing-actions">
+          {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}" class="btn btn-light">
+              Accéder à mon espace
+            </a>
+          {% else %}
+            <a href="{% url 'register_page' %}" class="btn btn-light">
+              Créer mon compte
+            </a>
+
+            <a
+              href="{% url 'login_page' %}"
+              class="btn btn-outline-light"
+            >
+              Se connecter
+            </a>
+          {% endif %}
+        </div>
+
+        <p class="landing-note">
+          Des besoins de transport aux propositions adaptées.
+        </p>
+      </div>
+
+      <!-- Illustration d'une demande, sans données réelles -->
+      <div class="col-lg-5">
+        <div class="journey-card">
+          <div class="journey-heading">
+            <strong>Une demande, un trajet</strong>
+            <span class="example-label">Exemple</span>
+          </div>
+
+          <div class="journey-route">
+            <span class="journey-point" aria-hidden="true"></span>
+            <div>
+              <span class="journey-caption">Départ</span>
+              <span class="journey-city">Tunis</span>
+            </div>
+
+            <span class="journey-line" aria-hidden="true"></span>
+            <span></span>
+
+            <span class="journey-point" aria-hidden="true"></span>
+            <div>
+              <span class="journey-caption">Destination</span>
+              <span class="journey-city">Sfax</span>
+            </div>
+          </div>
+
+          <div class="journey-details">
+            <div class="journey-detail">
+              <strong>2 000 kg</strong>
+              <span>Poids à transporter</span>
+            </div>
+
+            <div class="journey-detail">
+              <strong>10 m³</strong>
+              <span>Volume de marchandise</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Les deux publics -->
+  <section class="landing-section" aria-labelledby="titre-profils">
+    <div class="text-center">
+      <p class="section-label">Deux besoins, une plateforme</p>
+
+      <h2 id="titre-profils" class="section-title">
+        Un espace adapté à votre activité
+      </h2>
+
+      <p class="section-description">
+        Vous cherchez un transporteur ou vous disposez
+        de capacités de transport ? CargoLink vous accompagne.
+      </p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6">
+        <article class="audience-card">
+          <span class="audience-number" aria-hidden="true">01</span>
+
+          <h3>Vous êtes une PME</h3>
+
+          <p>
+            Présentez votre besoin de transport et recevez
+            les propositions des transporteurs.
+          </p>
+
+          <ul>
+            <li>Publiez vos demandes de transport.</li>
+            <li>Comparez les prix et les durées proposées.</li>
+            <li>Acceptez l’offre qui vous convient.</li>
+          </ul>
+
+          {% if not user.is_authenticated %}
+          <a
+            href="{% url 'register_page' %}"
+            class="btn btn-outline-primary"
+          >
+            Créer un compte PME
+          </a>
+          {% endif %}
+        </article>
+      </div>
+
+      <div class="col-md-6">
+        <article class="audience-card">
+          <span class="audience-number" aria-hidden="true">02</span>
+
+          <h3>Vous êtes transporteur</h3>
+
+          <p>
+            Consultez les demandes et proposez vos véhicules
+            pour les transports adaptés à votre capacité.
+          </p>
+
+          <ul>
+            <li>Enregistrez vos véhicules et vos chauffeurs.</li>
+            <li>Consultez les demandes compatibles.</li>
+            <li>Envoyez vos propositions après validation du compte.</li>
+          </ul>
+
+          {% if not user.is_authenticated %}
+          <a
+            href="{% url 'register_page' %}"
+            class="btn btn-outline-primary"
+          >
+            Créer un compte Transporteur
+          </a>
+          {% endif %}
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fonctionnement -->
+  <section class="landing-section" aria-labelledby="titre-etapes">
+    <div class="text-center">
+      <p class="section-label">Comment ça marche ?</p>
+
+      <h2 id="titre-etapes" class="section-title">
+        Du besoin à l’offre acceptée
+      </h2>
+
+      <p class="section-description">
+        Un parcours simple pour organiser vos échanges.
+      </p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-4">
+        <article class="process-card">
+          <div class="process-number" aria-hidden="true">01</div>
+          <h3>Publiez votre demande</h3>
+          <p>
+            La PME précise le trajet, la marchandise,
+            le poids et la date souhaitée.
+          </p>
+        </article>
+      </div>
+
+      <div class="col-md-4">
+        <article class="process-card">
+          <div class="process-number" aria-hidden="true">02</div>
+          <h3>Recevez des propositions</h3>
+          <p>
+            Les transporteurs proposent un véhicule,
+            un prix et une durée estimée.
+          </p>
+        </article>
+      </div>
+
+      <div class="col-md-4">
+        <article class="process-card">
+          <div class="process-number" aria-hidden="true">03</div>
+          <h3>Choisissez votre offre</h3>
+          <p>
+            La PME compare les propositions et accepte
+            celle qui correspond à son besoin.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Invitation finale -->
+  <section class="landing-cta" aria-labelledby="titre-demarrer">
+    <div class="row align-items-center g-4">
+      <div class="col-md-8">
+        <h2 id="titre-demarrer">Votre prochain trajet commence ici.</h2>
+        <p>
+          Rejoignez CargoLink pour publier vos besoins
+          ou proposer vos capacités de transport.
+        </p>
+      </div>
+
+      <div class="col-md-4 text-md-end">
+        {% if user.is_authenticated %}
+          <a href="{% url 'dashboard' %}" class="btn btn-primary">
+            Mon tableau de bord
+          </a>
+        {% else %}
+          <a href="{% url 'register_page' %}" class="btn btn-primary">
+            Commencer
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+</div>
+{% endblock %}

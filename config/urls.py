@@ -45,7 +45,7 @@ urlpatterns = [
     path('api/evaluations/', include('evaluations.urls')),
     path('api/factures/', include('factures.urls')),
     path("reclamations/", include("reclamations.urls")),
-
+    path("chauffeurs/", include("chauffeurs.urls")),
 ]
 
 # pages d'erreur personnalisées (actives quand DEBUG=False)
