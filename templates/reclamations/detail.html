@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}{{ reclamation.sujet }} - CargoLink{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">#{{ reclamation.id }} — {{ reclamation.sujet }}</h4>
+        <span class="badge bg-{% if reclamation.statut == 'NOUVELLE' %}light text-dark{% elif reclamation.statut == 'EN_COURS' %}warning text-dark{% elif reclamation.statut == 'RESOLUE' %}success{% else %}secondary{% endif %}">
+            {{ reclamation.get_statut_display }}
+        </span>
+    </div>
+    <div class="card-body">
+        <p>
+            <strong>Priorité :</strong>
+            <span class="badge bg-{% if reclamation.priorite == 'CRITIQUE' %}danger{% elif reclamation.priorite == 'HAUTE' %}warning text-dark{% elif reclamation.priorite == 'MOYENNE' %}info text-dark{% else %}secondary{% endif %}">
+                {{ reclamation.get_priorite_display }}
+            </span>
+        </p>
+        {% if est_support %}
+            <p><strong>Utilisateur :</strong> {{ reclamation.utilisateur.username }}</p>
+        {% endif %}
+        <p><strong>Créée le :</strong> {{ reclamation.date_creation|date:"d/m/Y à H:i" }}</p>
+        <p><strong>Dernière mise à jour :</strong> {{ reclamation.date_mise_a_jour|date:"d/m/Y à H:i" }}</p>
+
+        <hr>
+        <h5>Description</h5>
+        <p>{{ reclamation.description|linebreaks }}</p>
+
+        {% if reclamation.piece_jointe %}
+        <p>
+            <a href="{{ reclamation.piece_jointe.url }}" class="btn btn-outline-primary btn-sm" target="_blank">
+                Télécharger la pièce jointe
+            </a>
+        </p>
+        {% endif %}
+    </div>
+    <div class="card-footer">
+        <a href="{% url 'reclamations:liste' %}" class="btn btn-secondary">Retour</a>
+        {% if est_support %}
+            <a href="{% url 'reclamations:modifier' reclamation.pk %}" class="btn btn-primary">Modifier</a>
+            <a href="{% url 'reclamations:supprimer' reclamation.pk %}" class="btn btn-danger">Supprimer</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
