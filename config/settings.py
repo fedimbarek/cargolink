@@ -13,9 +13,8 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 import os
 from pathlib import Path
 
-from django.core.exceptions import ImproperlyConfigured
-from django.core.management.utils import get_random_secret_key
 import dj_database_url
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -72,7 +71,7 @@ INSTALLED_APPS = [
     'evaluations',
     'meteo',
     'factures',
-    'ia',
+    'ia',               # intelligence artificielle: estimation du prix (machine learning)
     'reclamations',
     'chauffeurs',
 ]
@@ -170,8 +169,8 @@ STORAGES = {
 }
 
 
-# settings.py
-import os
+# Email
+# https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
 # En local les e-mails s'affichent dans la console ; en production on utilise SMTP (variables EMAIL_*).
 MAILERS = {
@@ -187,6 +186,13 @@ MAILERS = {
         },
     },
 }
+
+# --- Notifications par e-mail (API Brevo) ---
+# Utilisées par reservations/services.py. Sans clé API, aucun e-mail n'est envoyé.
+BREVO_API_KEY = os.environ.get("BREVO_API_KEY", "")
+BREVO_SENDER_EMAIL = os.environ.get("BREVO_SENDER_EMAIL", "")
+BREVO_SENDER_NAME = os.environ.get("BREVO_SENDER_NAME", "CargoLink")
+SITE_URL = os.environ.get("SITE_URL", "http://127.0.0.1:8000")
 
 
 # --- CargoLink ---

@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.views.decorators.http import require_http_methods, require_POST
 
 from annonces.models import DemandeTransport
+from ia.ml import estimer_demande, verdict
 from reservations.forms import ReservationContactForm
 from reservations.models import Reservation
 from reservations.services import notifier
@@ -15,7 +16,6 @@ from users.decorators import role_required
 from .forms import PropositionForm, VehicleForm
 from .models import Proposition, Vehicle
 from .services import ErreurMetier, accepter_proposition, comparer, demandes_compatibles
-
 
 # ---------------------------------------------------------------- véhicules
 @role_required("TRANSPORTEUR")
