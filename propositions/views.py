@@ -1,11 +1,15 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.http import require_POST
+from django.urls import reverse
+from django.views.decorators.http import require_http_methods, require_POST
 
 from annonces.models import DemandeTransport
-from ia.ml import estimer_demande, verdict
+from reservations.forms import ReservationContactForm
+from reservations.models import Reservation
+from reservations.services import notifier
 from users.decorators import role_required
 
 from .forms import PropositionForm, VehicleForm
@@ -72,7 +76,13 @@ def proposer(request, demande_id):
         p = form.save(commit=False)
         p.demande, p.transporteur = demande, transporteur
         try:
-            p.save()
+            with transaction.atomic():
+                p.save()
+                notifier(
+                    demande.pme.user,
+                    f"Nouvelle proposition reçue pour votre demande #{demande.pk}.",
+                    reverse("propositions:comparer", args=[demande.pk]),
+                )
         except IntegrityError:
             messages.warning(request, "Vous avez déjà une proposition active sur cette demande.")
         else:
@@ -128,13 +138,27 @@ def comparer_propositions(request, demande_id):
 
 
 @role_required("PME")
-@require_POST
+@require_http_methods(["GET", "POST"])
+@transaction.atomic
 def accepter(request, pk):
     p = get_object_or_404(Proposition, pk=pk, demande__pme__user=request.user)
+    if request.method == "GET":
+        if p.status != Proposition.Status.PENDING or p.demande.status != DemandeTransport.Status.OPEN:
+            messages.error(request, "Cette proposition n'est plus disponible.")
+            return redirect("annonces:detail", pk=p.demande_id)
+        form = ReservationContactForm(proposition=p)
+        return render(request, "propositions/confirmer_reservation.html", {"p": p, "form": form})
+    form = ReservationContactForm(request.POST, proposition=p)
+    if not form.is_valid():
+        return render(request, "propositions/confirmer_reservation.html", {"p": p, "form": form})
     try:
         accepter_proposition(p)
     except ErreurMetier as e:
         messages.error(request, str(e))
     else:
+        reservation = Reservation.objects.get(proposition=p)
+        for field, value in form.cleaned_data.items():
+            setattr(reservation, field, value)
+        reservation.save(update_fields=list(form.cleaned_data))
         messages.success(request, "Proposition acceptée. Les autres offres ont été refusées.")
     return redirect("annonces:detail", pk=p.demande_id)

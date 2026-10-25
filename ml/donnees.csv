@@ -1,0 +1,481 @@
+texte,statut,groupe
+Suivi Tunis vers Sfax : incident / retard pour la réservation #3 - le camion est immobilisé.,urgent,incident_retard
+Suivi Tunis vers Sfax : incident / retard pour la réservation #6 - le véhicule est bloqué.,urgent,incident_retard
+Suivi Tunis vers Sfax : incident / retard pour la réservation #8 - le chauffeur signale un incident.,urgent,incident_retard
+Suivi Tunis vers Sfax : incident / retard pour la réservation #12 - la marchandise est endommagée.,urgent,incident_retard
+Suivi Tunis vers Sfax : incident / retard pour la réservation #17 - la cargaison est abîmée.,urgent,incident_retard
+Suivi Sousse vers Monastir : incident / retard pour la réservation #3 - la marchandise ne peut pas avancer.,urgent,incident_retard
+Suivi Sousse vers Monastir : incident / retard pour la réservation #6 - le camion est immobilisé.,urgent,incident_retard
+Suivi Sousse vers Monastir : incident / retard pour la réservation #8 - le véhicule est bloqué.,urgent,incident_retard
+Suivi Sousse vers Monastir : incident / retard pour la réservation #12 - le chauffeur signale un incident.,urgent,incident_retard
+Suivi Sousse vers Monastir : incident / retard pour la réservation #17 - la marchandise est endommagée.,urgent,incident_retard
+Suivi Monastir vers Tunis : incident / retard pour la réservation #3 - la cargaison est abîmée.,urgent,incident_retard
+Suivi Monastir vers Tunis : incident / retard pour la réservation #6 - la marchandise ne peut pas avancer.,urgent,incident_retard
+Suivi Monastir vers Tunis : incident / retard pour la réservation #8 - le camion est immobilisé.,urgent,incident_retard
+Suivi Monastir vers Tunis : incident / retard pour la réservation #12 - le véhicule est bloqué.,urgent,incident_retard
+Suivi Monastir vers Tunis : incident / retard pour la réservation #17 - le chauffeur signale un incident.,urgent,incident_retard
+Suivi Nabeul vers Gabès : incident / retard pour la réservation #3 - la marchandise est endommagée.,urgent,incident_retard
+Suivi Nabeul vers Gabès : incident / retard pour la réservation #6 - la cargaison est abîmée.,urgent,incident_retard
+Suivi Nabeul vers Gabès : incident / retard pour la réservation #8 - la marchandise ne peut pas avancer.,urgent,incident_retard
+Suivi Nabeul vers Gabès : incident / retard pour la réservation #12 - le camion est immobilisé.,urgent,incident_retard
+Suivi Nabeul vers Gabès : incident / retard pour la réservation #17 - le véhicule est bloqué.,urgent,incident_retard
+Incident signalé pour la réservation #3 sur Tunis vers Sfax : le camion est immobilisé.,urgent,incident_reservation
+Incident signalé pour la réservation #6 sur Tunis vers Sfax : le véhicule est bloqué.,urgent,incident_reservation
+Incident signalé pour la réservation #8 sur Tunis vers Sfax : le chauffeur signale un incident.,urgent,incident_reservation
+Incident signalé pour la réservation #12 sur Tunis vers Sfax : la marchandise est endommagée.,urgent,incident_reservation
+Incident signalé pour la réservation #17 sur Tunis vers Sfax : la cargaison est abîmée.,urgent,incident_reservation
+Incident signalé pour la réservation #3 sur Sousse vers Monastir : la marchandise ne peut pas avancer.,urgent,incident_reservation
+Incident signalé pour la réservation #6 sur Sousse vers Monastir : le camion est immobilisé.,urgent,incident_reservation
+Incident signalé pour la réservation #8 sur Sousse vers Monastir : le véhicule est bloqué.,urgent,incident_reservation
+Incident signalé pour la réservation #12 sur Sousse vers Monastir : le chauffeur signale un incident.,urgent,incident_reservation
+Incident signalé pour la réservation #17 sur Sousse vers Monastir : la marchandise est endommagée.,urgent,incident_reservation
+Incident signalé pour la réservation #3 sur Monastir vers Tunis : la cargaison est abîmée.,urgent,incident_reservation
+Incident signalé pour la réservation #6 sur Monastir vers Tunis : la marchandise ne peut pas avancer.,urgent,incident_reservation
+Incident signalé pour la réservation #8 sur Monastir vers Tunis : le camion est immobilisé.,urgent,incident_reservation
+Incident signalé pour la réservation #12 sur Monastir vers Tunis : le véhicule est bloqué.,urgent,incident_reservation
+Incident signalé pour la réservation #17 sur Monastir vers Tunis : le chauffeur signale un incident.,urgent,incident_reservation
+Incident signalé pour la réservation #3 sur Nabeul vers Gabès : la marchandise est endommagée.,urgent,incident_reservation
+Incident signalé pour la réservation #6 sur Nabeul vers Gabès : la cargaison est abîmée.,urgent,incident_reservation
+Incident signalé pour la réservation #8 sur Nabeul vers Gabès : la marchandise ne peut pas avancer.,urgent,incident_reservation
+Incident signalé pour la réservation #12 sur Nabeul vers Gabès : le camion est immobilisé.,urgent,incident_reservation
+Incident signalé pour la réservation #17 sur Nabeul vers Gabès : le véhicule est bloqué.,urgent,incident_reservation
+Cargaison bloquée ou endommagée pour la réservation #3 sur Tunis vers Sfax : le camion est immobilisé.,urgent,cargaison_bloquee
+Cargaison bloquée ou endommagée pour la réservation #6 sur Tunis vers Sfax : le véhicule est bloqué.,urgent,cargaison_bloquee
+Cargaison bloquée ou endommagée pour la réservation #8 sur Tunis vers Sfax : le chauffeur signale un incident.,urgent,cargaison_bloquee
+Cargaison bloquée ou endommagée pour la réservation #12 sur Tunis vers Sfax : la marchandise est endommagée.,urgent,cargaison_bloquee
+Cargaison bloquée ou endommagée pour la réservation #17 sur Tunis vers Sfax : la cargaison est abîmée.,urgent,cargaison_bloquee
+Cargaison bloquée ou endommagée pour la réservation #3 sur Sousse vers Monastir : la marchandise ne peut pas avancer.,urgent,cargaison_bloquee
+Cargaison bloquée ou endommagée pour la réservation #6 sur Sousse vers Monastir : le camion est immobilisé.,urgent,cargaison_bloquee
+Cargaison bloquée ou endommagée pour la réservation #8 sur Sousse vers Monastir : le véhicule est bloqué.,urgent,cargaison_bloquee
+Cargaison bloquée ou endommagée pour la réservation #12 sur Sousse vers Monastir : le chauffeur signale un incident.,urgent,cargaison_bloquee
+Cargaison bloquée ou endommagée pour la réservation #17 sur Sousse vers Monastir : la marchandise est endommagée.,urgent,cargaison_bloquee
+Cargaison bloquée ou endommagée pour la réservation #3 sur Monastir vers Tunis : la cargaison est abîmée.,urgent,cargaison_bloquee
+Cargaison bloquée ou endommagée pour la réservation #6 sur Monastir vers Tunis : la marchandise ne peut pas avancer.,urgent,cargaison_bloquee
+Cargaison bloquée ou endommagée pour la réservation #8 sur Monastir vers Tunis : le camion est immobilisé.,urgent,cargaison_bloquee
+Cargaison bloquée ou endommagée pour la réservation #12 sur Monastir vers Tunis : le véhicule est bloqué.,urgent,cargaison_bloquee
+Cargaison bloquée ou endommagée pour la réservation #17 sur Monastir vers Tunis : le chauffeur signale un incident.,urgent,cargaison_bloquee
+Cargaison bloquée ou endommagée pour la réservation #3 sur Nabeul vers Gabès : la marchandise est endommagée.,urgent,cargaison_bloquee
+Cargaison bloquée ou endommagée pour la réservation #6 sur Nabeul vers Gabès : la cargaison est abîmée.,urgent,cargaison_bloquee
+Cargaison bloquée ou endommagée pour la réservation #8 sur Nabeul vers Gabès : la marchandise ne peut pas avancer.,urgent,cargaison_bloquee
+Cargaison bloquée ou endommagée pour la réservation #12 sur Nabeul vers Gabès : le camion est immobilisé.,urgent,cargaison_bloquee
+Cargaison bloquée ou endommagée pour la réservation #17 sur Nabeul vers Gabès : le véhicule est bloqué.,urgent,cargaison_bloquee
+Accident signalé pendant le transport de la réservation #3 sur Tunis vers Sfax.,urgent,accident_chauffeur
+Accident signalé pendant le transport de la réservation #6 sur Tunis vers Sfax.,urgent,accident_chauffeur
+Accident signalé pendant le transport de la réservation #8 sur Tunis vers Sfax.,urgent,accident_chauffeur
+Accident signalé pendant le transport de la réservation #12 sur Tunis vers Sfax.,urgent,accident_chauffeur
+Accident signalé pendant le transport de la réservation #17 sur Tunis vers Sfax.,urgent,accident_chauffeur
+Accident signalé pendant le transport de la réservation #3 sur Sousse vers Monastir.,urgent,accident_chauffeur
+Accident signalé pendant le transport de la réservation #6 sur Sousse vers Monastir.,urgent,accident_chauffeur
+Accident signalé pendant le transport de la réservation #8 sur Sousse vers Monastir.,urgent,accident_chauffeur
+Accident signalé pendant le transport de la réservation #12 sur Sousse vers Monastir.,urgent,accident_chauffeur
+Accident signalé pendant le transport de la réservation #17 sur Sousse vers Monastir.,urgent,accident_chauffeur
+Accident signalé pendant le transport de la réservation #3 sur Monastir vers Tunis.,urgent,accident_chauffeur
+Accident signalé pendant le transport de la réservation #6 sur Monastir vers Tunis.,urgent,accident_chauffeur
+Accident signalé pendant le transport de la réservation #8 sur Monastir vers Tunis.,urgent,accident_chauffeur
+Accident signalé pendant le transport de la réservation #12 sur Monastir vers Tunis.,urgent,accident_chauffeur
+Accident signalé pendant le transport de la réservation #17 sur Monastir vers Tunis.,urgent,accident_chauffeur
+Accident signalé pendant le transport de la réservation #3 sur Nabeul vers Gabès.,urgent,accident_chauffeur
+Accident signalé pendant le transport de la réservation #6 sur Nabeul vers Gabès.,urgent,accident_chauffeur
+Accident signalé pendant le transport de la réservation #8 sur Nabeul vers Gabès.,urgent,accident_chauffeur
+Accident signalé pendant le transport de la réservation #12 sur Nabeul vers Gabès.,urgent,accident_chauffeur
+Accident signalé pendant le transport de la réservation #17 sur Nabeul vers Gabès.,urgent,accident_chauffeur
+Marchandise endommagée signalée pour la réservation #3 sur Tunis vers Sfax.,urgent,marchandise_endommagee
+Marchandise endommagée signalée pour la réservation #6 sur Tunis vers Sfax.,urgent,marchandise_endommagee
+Marchandise endommagée signalée pour la réservation #8 sur Tunis vers Sfax.,urgent,marchandise_endommagee
+Marchandise endommagée signalée pour la réservation #12 sur Tunis vers Sfax.,urgent,marchandise_endommagee
+Marchandise endommagée signalée pour la réservation #17 sur Tunis vers Sfax.,urgent,marchandise_endommagee
+Marchandise endommagée signalée pour la réservation #3 sur Sousse vers Monastir.,urgent,marchandise_endommagee
+Marchandise endommagée signalée pour la réservation #6 sur Sousse vers Monastir.,urgent,marchandise_endommagee
+Marchandise endommagée signalée pour la réservation #8 sur Sousse vers Monastir.,urgent,marchandise_endommagee
+Marchandise endommagée signalée pour la réservation #12 sur Sousse vers Monastir.,urgent,marchandise_endommagee
+Marchandise endommagée signalée pour la réservation #17 sur Sousse vers Monastir.,urgent,marchandise_endommagee
+Marchandise endommagée signalée pour la réservation #3 sur Monastir vers Tunis.,urgent,marchandise_endommagee
+Marchandise endommagée signalée pour la réservation #6 sur Monastir vers Tunis.,urgent,marchandise_endommagee
+Marchandise endommagée signalée pour la réservation #8 sur Monastir vers Tunis.,urgent,marchandise_endommagee
+Marchandise endommagée signalée pour la réservation #12 sur Monastir vers Tunis.,urgent,marchandise_endommagee
+Marchandise endommagée signalée pour la réservation #17 sur Monastir vers Tunis.,urgent,marchandise_endommagee
+Marchandise endommagée signalée pour la réservation #3 sur Nabeul vers Gabès.,urgent,marchandise_endommagee
+Marchandise endommagée signalée pour la réservation #6 sur Nabeul vers Gabès.,urgent,marchandise_endommagee
+Marchandise endommagée signalée pour la réservation #8 sur Nabeul vers Gabès.,urgent,marchandise_endommagee
+Marchandise endommagée signalée pour la réservation #12 sur Nabeul vers Gabès.,urgent,marchandise_endommagee
+Marchandise endommagée signalée pour la réservation #17 sur Nabeul vers Gabès.,urgent,marchandise_endommagee
+Colis perdu pendant le transport de la réservation #3 sur Tunis vers Sfax.,urgent,colis_perdu
+Colis perdu pendant le transport de la réservation #6 sur Tunis vers Sfax.,urgent,colis_perdu
+Colis perdu pendant le transport de la réservation #8 sur Tunis vers Sfax.,urgent,colis_perdu
+Colis perdu pendant le transport de la réservation #12 sur Tunis vers Sfax.,urgent,colis_perdu
+Colis perdu pendant le transport de la réservation #17 sur Tunis vers Sfax.,urgent,colis_perdu
+Colis perdu pendant le transport de la réservation #3 sur Sousse vers Monastir.,urgent,colis_perdu
+Colis perdu pendant le transport de la réservation #6 sur Sousse vers Monastir.,urgent,colis_perdu
+Colis perdu pendant le transport de la réservation #8 sur Sousse vers Monastir.,urgent,colis_perdu
+Colis perdu pendant le transport de la réservation #12 sur Sousse vers Monastir.,urgent,colis_perdu
+Colis perdu pendant le transport de la réservation #17 sur Sousse vers Monastir.,urgent,colis_perdu
+Colis perdu pendant le transport de la réservation #3 sur Monastir vers Tunis.,urgent,colis_perdu
+Colis perdu pendant le transport de la réservation #6 sur Monastir vers Tunis.,urgent,colis_perdu
+Colis perdu pendant le transport de la réservation #8 sur Monastir vers Tunis.,urgent,colis_perdu
+Colis perdu pendant le transport de la réservation #12 sur Monastir vers Tunis.,urgent,colis_perdu
+Colis perdu pendant le transport de la réservation #17 sur Monastir vers Tunis.,urgent,colis_perdu
+Colis perdu pendant le transport de la réservation #3 sur Nabeul vers Gabès.,urgent,colis_perdu
+Colis perdu pendant le transport de la réservation #6 sur Nabeul vers Gabès.,urgent,colis_perdu
+Colis perdu pendant le transport de la réservation #8 sur Nabeul vers Gabès.,urgent,colis_perdu
+Colis perdu pendant le transport de la réservation #12 sur Nabeul vers Gabès.,urgent,colis_perdu
+Colis perdu pendant le transport de la réservation #17 sur Nabeul vers Gabès.,urgent,colis_perdu
+Plusieurs jours de retard pour la livraison de la réservation #3 sur Tunis vers Sfax.,urgent,retard_important
+Plusieurs jours de retard pour la livraison de la réservation #6 sur Tunis vers Sfax.,urgent,retard_important
+Plusieurs jours de retard pour la livraison de la réservation #8 sur Tunis vers Sfax.,urgent,retard_important
+Plusieurs jours de retard pour la livraison de la réservation #12 sur Tunis vers Sfax.,urgent,retard_important
+Plusieurs jours de retard pour la livraison de la réservation #17 sur Tunis vers Sfax.,urgent,retard_important
+Plusieurs jours de retard pour la livraison de la réservation #3 sur Sousse vers Monastir.,urgent,retard_important
+Plusieurs jours de retard pour la livraison de la réservation #6 sur Sousse vers Monastir.,urgent,retard_important
+Plusieurs jours de retard pour la livraison de la réservation #8 sur Sousse vers Monastir.,urgent,retard_important
+Plusieurs jours de retard pour la livraison de la réservation #12 sur Sousse vers Monastir.,urgent,retard_important
+Plusieurs jours de retard pour la livraison de la réservation #17 sur Sousse vers Monastir.,urgent,retard_important
+Plusieurs jours de retard pour la livraison de la réservation #3 sur Monastir vers Tunis.,urgent,retard_important
+Plusieurs jours de retard pour la livraison de la réservation #6 sur Monastir vers Tunis.,urgent,retard_important
+Plusieurs jours de retard pour la livraison de la réservation #8 sur Monastir vers Tunis.,urgent,retard_important
+Plusieurs jours de retard pour la livraison de la réservation #12 sur Monastir vers Tunis.,urgent,retard_important
+Plusieurs jours de retard pour la livraison de la réservation #17 sur Monastir vers Tunis.,urgent,retard_important
+Plusieurs jours de retard pour la livraison de la réservation #3 sur Nabeul vers Gabès.,urgent,retard_important
+Plusieurs jours de retard pour la livraison de la réservation #6 sur Nabeul vers Gabès.,urgent,retard_important
+Plusieurs jours de retard pour la livraison de la réservation #8 sur Nabeul vers Gabès.,urgent,retard_important
+Plusieurs jours de retard pour la livraison de la réservation #12 sur Nabeul vers Gabès.,urgent,retard_important
+Plusieurs jours de retard pour la livraison de la réservation #17 sur Nabeul vers Gabès.,urgent,retard_important
+"Transporteur injoignable, livraison bloquée pour la réservation #3 sur Tunis vers Sfax.",urgent,transporteur_injoignable
+"Transporteur injoignable, livraison bloquée pour la réservation #6 sur Tunis vers Sfax.",urgent,transporteur_injoignable
+"Transporteur injoignable, livraison bloquée pour la réservation #8 sur Tunis vers Sfax.",urgent,transporteur_injoignable
+"Transporteur injoignable, livraison bloquée pour la réservation #12 sur Tunis vers Sfax.",urgent,transporteur_injoignable
+"Transporteur injoignable, livraison bloquée pour la réservation #17 sur Tunis vers Sfax.",urgent,transporteur_injoignable
+"Transporteur injoignable, livraison bloquée pour la réservation #3 sur Sousse vers Monastir.",urgent,transporteur_injoignable
+"Transporteur injoignable, livraison bloquée pour la réservation #6 sur Sousse vers Monastir.",urgent,transporteur_injoignable
+"Transporteur injoignable, livraison bloquée pour la réservation #8 sur Sousse vers Monastir.",urgent,transporteur_injoignable
+"Transporteur injoignable, livraison bloquée pour la réservation #12 sur Sousse vers Monastir.",urgent,transporteur_injoignable
+"Transporteur injoignable, livraison bloquée pour la réservation #17 sur Sousse vers Monastir.",urgent,transporteur_injoignable
+"Transporteur injoignable, livraison bloquée pour la réservation #3 sur Monastir vers Tunis.",urgent,transporteur_injoignable
+"Transporteur injoignable, livraison bloquée pour la réservation #6 sur Monastir vers Tunis.",urgent,transporteur_injoignable
+"Transporteur injoignable, livraison bloquée pour la réservation #8 sur Monastir vers Tunis.",urgent,transporteur_injoignable
+"Transporteur injoignable, livraison bloquée pour la réservation #12 sur Monastir vers Tunis.",urgent,transporteur_injoignable
+"Transporteur injoignable, livraison bloquée pour la réservation #17 sur Monastir vers Tunis.",urgent,transporteur_injoignable
+"Transporteur injoignable, livraison bloquée pour la réservation #3 sur Nabeul vers Gabès.",urgent,transporteur_injoignable
+"Transporteur injoignable, livraison bloquée pour la réservation #6 sur Nabeul vers Gabès.",urgent,transporteur_injoignable
+"Transporteur injoignable, livraison bloquée pour la réservation #8 sur Nabeul vers Gabès.",urgent,transporteur_injoignable
+"Transporteur injoignable, livraison bloquée pour la réservation #12 sur Nabeul vers Gabès.",urgent,transporteur_injoignable
+"Transporteur injoignable, livraison bloquée pour la réservation #17 sur Nabeul vers Gabès.",urgent,transporteur_injoignable
+"Nouvelle proposition reçue pour votre demande #3, trajet Tunis vers Sfax.",normal,proposition_recue
+"Nouvelle proposition reçue pour votre demande #6, trajet Tunis vers Sfax.",normal,proposition_recue
+"Nouvelle proposition reçue pour votre demande #8, trajet Tunis vers Sfax.",normal,proposition_recue
+"Nouvelle proposition reçue pour votre demande #12, trajet Tunis vers Sfax.",normal,proposition_recue
+"Nouvelle proposition reçue pour votre demande #17, trajet Tunis vers Sfax.",normal,proposition_recue
+"Nouvelle proposition reçue pour votre demande #3, trajet Sousse vers Monastir.",normal,proposition_recue
+"Nouvelle proposition reçue pour votre demande #6, trajet Sousse vers Monastir.",normal,proposition_recue
+"Nouvelle proposition reçue pour votre demande #8, trajet Sousse vers Monastir.",normal,proposition_recue
+"Nouvelle proposition reçue pour votre demande #12, trajet Sousse vers Monastir.",normal,proposition_recue
+"Nouvelle proposition reçue pour votre demande #17, trajet Sousse vers Monastir.",normal,proposition_recue
+"Nouvelle proposition reçue pour votre demande #3, trajet Monastir vers Tunis.",normal,proposition_recue
+"Nouvelle proposition reçue pour votre demande #6, trajet Monastir vers Tunis.",normal,proposition_recue
+"Nouvelle proposition reçue pour votre demande #8, trajet Monastir vers Tunis.",normal,proposition_recue
+"Nouvelle proposition reçue pour votre demande #12, trajet Monastir vers Tunis.",normal,proposition_recue
+"Nouvelle proposition reçue pour votre demande #17, trajet Monastir vers Tunis.",normal,proposition_recue
+"Nouvelle proposition reçue pour votre demande #3, trajet Nabeul vers Gabès.",normal,proposition_recue
+"Nouvelle proposition reçue pour votre demande #6, trajet Nabeul vers Gabès.",normal,proposition_recue
+"Nouvelle proposition reçue pour votre demande #8, trajet Nabeul vers Gabès.",normal,proposition_recue
+"Nouvelle proposition reçue pour votre demande #12, trajet Nabeul vers Gabès.",normal,proposition_recue
+"Nouvelle proposition reçue pour votre demande #17, trajet Nabeul vers Gabès.",normal,proposition_recue
+Un transporteur a envoyé une offre pour la demande #3 (Tunis vers Sfax) : comparez la proposition.,normal,offre_a_comparer
+Un transporteur a envoyé une offre pour la demande #6 (Tunis vers Sfax) : comparez la proposition.,normal,offre_a_comparer
+Un transporteur a envoyé une offre pour la demande #8 (Tunis vers Sfax) : comparez la proposition.,normal,offre_a_comparer
+Un transporteur a envoyé une offre pour la demande #12 (Tunis vers Sfax) : comparez la proposition.,normal,offre_a_comparer
+Un transporteur a envoyé une offre pour la demande #17 (Tunis vers Sfax) : comparez la proposition.,normal,offre_a_comparer
+Un transporteur a envoyé une offre pour la demande #3 (Sousse vers Monastir) : comparez la proposition.,normal,offre_a_comparer
+Un transporteur a envoyé une offre pour la demande #6 (Sousse vers Monastir) : comparez la proposition.,normal,offre_a_comparer
+Un transporteur a envoyé une offre pour la demande #8 (Sousse vers Monastir) : comparez la proposition.,normal,offre_a_comparer
+Un transporteur a envoyé une offre pour la demande #12 (Sousse vers Monastir) : comparez la proposition.,normal,offre_a_comparer
+Un transporteur a envoyé une offre pour la demande #17 (Sousse vers Monastir) : comparez la proposition.,normal,offre_a_comparer
+Un transporteur a envoyé une offre pour la demande #3 (Monastir vers Tunis) : comparez la proposition.,normal,offre_a_comparer
+Un transporteur a envoyé une offre pour la demande #6 (Monastir vers Tunis) : comparez la proposition.,normal,offre_a_comparer
+Un transporteur a envoyé une offre pour la demande #8 (Monastir vers Tunis) : comparez la proposition.,normal,offre_a_comparer
+Un transporteur a envoyé une offre pour la demande #12 (Monastir vers Tunis) : comparez la proposition.,normal,offre_a_comparer
+Un transporteur a envoyé une offre pour la demande #17 (Monastir vers Tunis) : comparez la proposition.,normal,offre_a_comparer
+Un transporteur a envoyé une offre pour la demande #3 (Nabeul vers Gabès) : comparez la proposition.,normal,offre_a_comparer
+Un transporteur a envoyé une offre pour la demande #6 (Nabeul vers Gabès) : comparez la proposition.,normal,offre_a_comparer
+Un transporteur a envoyé une offre pour la demande #8 (Nabeul vers Gabès) : comparez la proposition.,normal,offre_a_comparer
+Un transporteur a envoyé une offre pour la demande #12 (Nabeul vers Gabès) : comparez la proposition.,normal,offre_a_comparer
+Un transporteur a envoyé une offre pour la demande #17 (Nabeul vers Gabès) : comparez la proposition.,normal,offre_a_comparer
+Une proposition attend votre validation pour la demande #3 (Tunis vers Sfax).,normal,offre_a_valider
+Une proposition attend votre validation pour la demande #6 (Tunis vers Sfax).,normal,offre_a_valider
+Une proposition attend votre validation pour la demande #8 (Tunis vers Sfax).,normal,offre_a_valider
+Une proposition attend votre validation pour la demande #12 (Tunis vers Sfax).,normal,offre_a_valider
+Une proposition attend votre validation pour la demande #17 (Tunis vers Sfax).,normal,offre_a_valider
+Une proposition attend votre validation pour la demande #3 (Sousse vers Monastir).,normal,offre_a_valider
+Une proposition attend votre validation pour la demande #6 (Sousse vers Monastir).,normal,offre_a_valider
+Une proposition attend votre validation pour la demande #8 (Sousse vers Monastir).,normal,offre_a_valider
+Une proposition attend votre validation pour la demande #12 (Sousse vers Monastir).,normal,offre_a_valider
+Une proposition attend votre validation pour la demande #17 (Sousse vers Monastir).,normal,offre_a_valider
+Une proposition attend votre validation pour la demande #3 (Monastir vers Tunis).,normal,offre_a_valider
+Une proposition attend votre validation pour la demande #6 (Monastir vers Tunis).,normal,offre_a_valider
+Une proposition attend votre validation pour la demande #8 (Monastir vers Tunis).,normal,offre_a_valider
+Une proposition attend votre validation pour la demande #12 (Monastir vers Tunis).,normal,offre_a_valider
+Une proposition attend votre validation pour la demande #17 (Monastir vers Tunis).,normal,offre_a_valider
+Une proposition attend votre validation pour la demande #3 (Nabeul vers Gabès).,normal,offre_a_valider
+Une proposition attend votre validation pour la demande #6 (Nabeul vers Gabès).,normal,offre_a_valider
+Une proposition attend votre validation pour la demande #8 (Nabeul vers Gabès).,normal,offre_a_valider
+Une proposition attend votre validation pour la demande #12 (Nabeul vers Gabès).,normal,offre_a_valider
+Une proposition attend votre validation pour la demande #17 (Nabeul vers Gabès).,normal,offre_a_valider
+Une modification de date est demandée pour la réservation #3 (Tunis vers Sfax).,normal,modification_date
+Une modification de date est demandée pour la réservation #6 (Tunis vers Sfax).,normal,modification_date
+Une modification de date est demandée pour la réservation #8 (Tunis vers Sfax).,normal,modification_date
+Une modification de date est demandée pour la réservation #12 (Tunis vers Sfax).,normal,modification_date
+Une modification de date est demandée pour la réservation #17 (Tunis vers Sfax).,normal,modification_date
+Une modification de date est demandée pour la réservation #3 (Sousse vers Monastir).,normal,modification_date
+Une modification de date est demandée pour la réservation #6 (Sousse vers Monastir).,normal,modification_date
+Une modification de date est demandée pour la réservation #8 (Sousse vers Monastir).,normal,modification_date
+Une modification de date est demandée pour la réservation #12 (Sousse vers Monastir).,normal,modification_date
+Une modification de date est demandée pour la réservation #17 (Sousse vers Monastir).,normal,modification_date
+Une modification de date est demandée pour la réservation #3 (Monastir vers Tunis).,normal,modification_date
+Une modification de date est demandée pour la réservation #6 (Monastir vers Tunis).,normal,modification_date
+Une modification de date est demandée pour la réservation #8 (Monastir vers Tunis).,normal,modification_date
+Une modification de date est demandée pour la réservation #12 (Monastir vers Tunis).,normal,modification_date
+Une modification de date est demandée pour la réservation #17 (Monastir vers Tunis).,normal,modification_date
+Une modification de date est demandée pour la réservation #3 (Nabeul vers Gabès).,normal,modification_date
+Une modification de date est demandée pour la réservation #6 (Nabeul vers Gabès).,normal,modification_date
+Une modification de date est demandée pour la réservation #8 (Nabeul vers Gabès).,normal,modification_date
+Une modification de date est demandée pour la réservation #12 (Nabeul vers Gabès).,normal,modification_date
+Une modification de date est demandée pour la réservation #17 (Nabeul vers Gabès).,normal,modification_date
+Un changement d'adresse est demandé pour la réservation #3 (Tunis vers Sfax).,normal,modification_adresse
+Un changement d'adresse est demandé pour la réservation #6 (Tunis vers Sfax).,normal,modification_adresse
+Un changement d'adresse est demandé pour la réservation #8 (Tunis vers Sfax).,normal,modification_adresse
+Un changement d'adresse est demandé pour la réservation #12 (Tunis vers Sfax).,normal,modification_adresse
+Un changement d'adresse est demandé pour la réservation #17 (Tunis vers Sfax).,normal,modification_adresse
+Un changement d'adresse est demandé pour la réservation #3 (Sousse vers Monastir).,normal,modification_adresse
+Un changement d'adresse est demandé pour la réservation #6 (Sousse vers Monastir).,normal,modification_adresse
+Un changement d'adresse est demandé pour la réservation #8 (Sousse vers Monastir).,normal,modification_adresse
+Un changement d'adresse est demandé pour la réservation #12 (Sousse vers Monastir).,normal,modification_adresse
+Un changement d'adresse est demandé pour la réservation #17 (Sousse vers Monastir).,normal,modification_adresse
+Un changement d'adresse est demandé pour la réservation #3 (Monastir vers Tunis).,normal,modification_adresse
+Un changement d'adresse est demandé pour la réservation #6 (Monastir vers Tunis).,normal,modification_adresse
+Un changement d'adresse est demandé pour la réservation #8 (Monastir vers Tunis).,normal,modification_adresse
+Un changement d'adresse est demandé pour la réservation #12 (Monastir vers Tunis).,normal,modification_adresse
+Un changement d'adresse est demandé pour la réservation #17 (Monastir vers Tunis).,normal,modification_adresse
+Un changement d'adresse est demandé pour la réservation #3 (Nabeul vers Gabès).,normal,modification_adresse
+Un changement d'adresse est demandé pour la réservation #6 (Nabeul vers Gabès).,normal,modification_adresse
+Un changement d'adresse est demandé pour la réservation #8 (Nabeul vers Gabès).,normal,modification_adresse
+Un changement d'adresse est demandé pour la réservation #12 (Nabeul vers Gabès).,normal,modification_adresse
+Un changement d'adresse est demandé pour la réservation #17 (Nabeul vers Gabès).,normal,modification_adresse
+"Une réponse sur votre demande #3 (Tunis vers Sfax) est disponible, veuillez la consulter.",normal,demande_renseignement
+"Une réponse sur votre demande #6 (Tunis vers Sfax) est disponible, veuillez la consulter.",normal,demande_renseignement
+"Une réponse sur votre demande #8 (Tunis vers Sfax) est disponible, veuillez la consulter.",normal,demande_renseignement
+"Une réponse sur votre demande #12 (Tunis vers Sfax) est disponible, veuillez la consulter.",normal,demande_renseignement
+"Une réponse sur votre demande #17 (Tunis vers Sfax) est disponible, veuillez la consulter.",normal,demande_renseignement
+"Une réponse sur votre demande #3 (Sousse vers Monastir) est disponible, veuillez la consulter.",normal,demande_renseignement
+"Une réponse sur votre demande #6 (Sousse vers Monastir) est disponible, veuillez la consulter.",normal,demande_renseignement
+"Une réponse sur votre demande #8 (Sousse vers Monastir) est disponible, veuillez la consulter.",normal,demande_renseignement
+"Une réponse sur votre demande #12 (Sousse vers Monastir) est disponible, veuillez la consulter.",normal,demande_renseignement
+"Une réponse sur votre demande #17 (Sousse vers Monastir) est disponible, veuillez la consulter.",normal,demande_renseignement
+"Une réponse sur votre demande #3 (Monastir vers Tunis) est disponible, veuillez la consulter.",normal,demande_renseignement
+"Une réponse sur votre demande #6 (Monastir vers Tunis) est disponible, veuillez la consulter.",normal,demande_renseignement
+"Une réponse sur votre demande #8 (Monastir vers Tunis) est disponible, veuillez la consulter.",normal,demande_renseignement
+"Une réponse sur votre demande #12 (Monastir vers Tunis) est disponible, veuillez la consulter.",normal,demande_renseignement
+"Une réponse sur votre demande #17 (Monastir vers Tunis) est disponible, veuillez la consulter.",normal,demande_renseignement
+"Une réponse sur votre demande #3 (Nabeul vers Gabès) est disponible, veuillez la consulter.",normal,demande_renseignement
+"Une réponse sur votre demande #6 (Nabeul vers Gabès) est disponible, veuillez la consulter.",normal,demande_renseignement
+"Une réponse sur votre demande #8 (Nabeul vers Gabès) est disponible, veuillez la consulter.",normal,demande_renseignement
+"Une réponse sur votre demande #12 (Nabeul vers Gabès) est disponible, veuillez la consulter.",normal,demande_renseignement
+"Une réponse sur votre demande #17 (Nabeul vers Gabès) est disponible, veuillez la consulter.",normal,demande_renseignement
+Un document manque pour finaliser la réservation #3 (Tunis vers Sfax).,normal,document_a_fournir
+Un document manque pour finaliser la réservation #6 (Tunis vers Sfax).,normal,document_a_fournir
+Un document manque pour finaliser la réservation #8 (Tunis vers Sfax).,normal,document_a_fournir
+Un document manque pour finaliser la réservation #12 (Tunis vers Sfax).,normal,document_a_fournir
+Un document manque pour finaliser la réservation #17 (Tunis vers Sfax).,normal,document_a_fournir
+Un document manque pour finaliser la réservation #3 (Sousse vers Monastir).,normal,document_a_fournir
+Un document manque pour finaliser la réservation #6 (Sousse vers Monastir).,normal,document_a_fournir
+Un document manque pour finaliser la réservation #8 (Sousse vers Monastir).,normal,document_a_fournir
+Un document manque pour finaliser la réservation #12 (Sousse vers Monastir).,normal,document_a_fournir
+Un document manque pour finaliser la réservation #17 (Sousse vers Monastir).,normal,document_a_fournir
+Un document manque pour finaliser la réservation #3 (Monastir vers Tunis).,normal,document_a_fournir
+Un document manque pour finaliser la réservation #6 (Monastir vers Tunis).,normal,document_a_fournir
+Un document manque pour finaliser la réservation #8 (Monastir vers Tunis).,normal,document_a_fournir
+Un document manque pour finaliser la réservation #12 (Monastir vers Tunis).,normal,document_a_fournir
+Un document manque pour finaliser la réservation #17 (Monastir vers Tunis).,normal,document_a_fournir
+Un document manque pour finaliser la réservation #3 (Nabeul vers Gabès).,normal,document_a_fournir
+Un document manque pour finaliser la réservation #6 (Nabeul vers Gabès).,normal,document_a_fournir
+Un document manque pour finaliser la réservation #8 (Nabeul vers Gabès).,normal,document_a_fournir
+Un document manque pour finaliser la réservation #12 (Nabeul vers Gabès).,normal,document_a_fournir
+Un document manque pour finaliser la réservation #17 (Nabeul vers Gabès).,normal,document_a_fournir
+Veuillez confirmer les détails de la réservation #3 (Tunis vers Sfax) avant le départ.,normal,confirmation_requise
+Veuillez confirmer les détails de la réservation #6 (Tunis vers Sfax) avant le départ.,normal,confirmation_requise
+Veuillez confirmer les détails de la réservation #8 (Tunis vers Sfax) avant le départ.,normal,confirmation_requise
+Veuillez confirmer les détails de la réservation #12 (Tunis vers Sfax) avant le départ.,normal,confirmation_requise
+Veuillez confirmer les détails de la réservation #17 (Tunis vers Sfax) avant le départ.,normal,confirmation_requise
+Veuillez confirmer les détails de la réservation #3 (Sousse vers Monastir) avant le départ.,normal,confirmation_requise
+Veuillez confirmer les détails de la réservation #6 (Sousse vers Monastir) avant le départ.,normal,confirmation_requise
+Veuillez confirmer les détails de la réservation #8 (Sousse vers Monastir) avant le départ.,normal,confirmation_requise
+Veuillez confirmer les détails de la réservation #12 (Sousse vers Monastir) avant le départ.,normal,confirmation_requise
+Veuillez confirmer les détails de la réservation #17 (Sousse vers Monastir) avant le départ.,normal,confirmation_requise
+Veuillez confirmer les détails de la réservation #3 (Monastir vers Tunis) avant le départ.,normal,confirmation_requise
+Veuillez confirmer les détails de la réservation #6 (Monastir vers Tunis) avant le départ.,normal,confirmation_requise
+Veuillez confirmer les détails de la réservation #8 (Monastir vers Tunis) avant le départ.,normal,confirmation_requise
+Veuillez confirmer les détails de la réservation #12 (Monastir vers Tunis) avant le départ.,normal,confirmation_requise
+Veuillez confirmer les détails de la réservation #17 (Monastir vers Tunis) avant le départ.,normal,confirmation_requise
+Veuillez confirmer les détails de la réservation #3 (Nabeul vers Gabès) avant le départ.,normal,confirmation_requise
+Veuillez confirmer les détails de la réservation #6 (Nabeul vers Gabès) avant le départ.,normal,confirmation_requise
+Veuillez confirmer les détails de la réservation #8 (Nabeul vers Gabès) avant le départ.,normal,confirmation_requise
+Veuillez confirmer les détails de la réservation #12 (Nabeul vers Gabès) avant le départ.,normal,confirmation_requise
+Veuillez confirmer les détails de la réservation #17 (Nabeul vers Gabès) avant le départ.,normal,confirmation_requise
+Votre réservation #3 pour Tunis vers Sfax est confirmée.,info,reservation_confirmee
+Votre réservation #6 pour Tunis vers Sfax est confirmée.,info,reservation_confirmee
+Votre réservation #8 pour Tunis vers Sfax est confirmée.,info,reservation_confirmee
+Votre réservation #12 pour Tunis vers Sfax est confirmée.,info,reservation_confirmee
+Votre réservation #17 pour Tunis vers Sfax est confirmée.,info,reservation_confirmee
+Votre réservation #3 pour Sousse vers Monastir est confirmée.,info,reservation_confirmee
+Votre réservation #6 pour Sousse vers Monastir est confirmée.,info,reservation_confirmee
+Votre réservation #8 pour Sousse vers Monastir est confirmée.,info,reservation_confirmee
+Votre réservation #12 pour Sousse vers Monastir est confirmée.,info,reservation_confirmee
+Votre réservation #17 pour Sousse vers Monastir est confirmée.,info,reservation_confirmee
+Votre réservation #3 pour Monastir vers Tunis est confirmée.,info,reservation_confirmee
+Votre réservation #6 pour Monastir vers Tunis est confirmée.,info,reservation_confirmee
+Votre réservation #8 pour Monastir vers Tunis est confirmée.,info,reservation_confirmee
+Votre réservation #12 pour Monastir vers Tunis est confirmée.,info,reservation_confirmee
+Votre réservation #17 pour Monastir vers Tunis est confirmée.,info,reservation_confirmee
+Votre réservation #3 pour Nabeul vers Gabès est confirmée.,info,reservation_confirmee
+Votre réservation #6 pour Nabeul vers Gabès est confirmée.,info,reservation_confirmee
+Votre réservation #8 pour Nabeul vers Gabès est confirmée.,info,reservation_confirmee
+Votre réservation #12 pour Nabeul vers Gabès est confirmée.,info,reservation_confirmee
+Votre réservation #17 pour Nabeul vers Gabès est confirmée.,info,reservation_confirmee
+Statut : proposition confirmée pour la réservation #3 (Tunis vers Sfax).,info,proposition_confirmee
+Statut : proposition confirmée pour la réservation #6 (Tunis vers Sfax).,info,proposition_confirmee
+Statut : proposition confirmée pour la réservation #8 (Tunis vers Sfax).,info,proposition_confirmee
+Statut : proposition confirmée pour la réservation #12 (Tunis vers Sfax).,info,proposition_confirmee
+Statut : proposition confirmée pour la réservation #17 (Tunis vers Sfax).,info,proposition_confirmee
+Statut : proposition confirmée pour la réservation #3 (Sousse vers Monastir).,info,proposition_confirmee
+Statut : proposition confirmée pour la réservation #6 (Sousse vers Monastir).,info,proposition_confirmee
+Statut : proposition confirmée pour la réservation #8 (Sousse vers Monastir).,info,proposition_confirmee
+Statut : proposition confirmée pour la réservation #12 (Sousse vers Monastir).,info,proposition_confirmee
+Statut : proposition confirmée pour la réservation #17 (Sousse vers Monastir).,info,proposition_confirmee
+Statut : proposition confirmée pour la réservation #3 (Monastir vers Tunis).,info,proposition_confirmee
+Statut : proposition confirmée pour la réservation #6 (Monastir vers Tunis).,info,proposition_confirmee
+Statut : proposition confirmée pour la réservation #8 (Monastir vers Tunis).,info,proposition_confirmee
+Statut : proposition confirmée pour la réservation #12 (Monastir vers Tunis).,info,proposition_confirmee
+Statut : proposition confirmée pour la réservation #17 (Monastir vers Tunis).,info,proposition_confirmee
+Statut : proposition confirmée pour la réservation #3 (Nabeul vers Gabès).,info,proposition_confirmee
+Statut : proposition confirmée pour la réservation #6 (Nabeul vers Gabès).,info,proposition_confirmee
+Statut : proposition confirmée pour la réservation #8 (Nabeul vers Gabès).,info,proposition_confirmee
+Statut : proposition confirmée pour la réservation #12 (Nabeul vers Gabès).,info,proposition_confirmee
+Statut : proposition confirmée pour la réservation #17 (Nabeul vers Gabès).,info,proposition_confirmee
+Votre marchandise pour la réservation #3 (Tunis vers Sfax) est en route.,info,marchandise_en_route
+Votre marchandise pour la réservation #6 (Tunis vers Sfax) est en route.,info,marchandise_en_route
+Votre marchandise pour la réservation #8 (Tunis vers Sfax) est en route.,info,marchandise_en_route
+Votre marchandise pour la réservation #12 (Tunis vers Sfax) est en route.,info,marchandise_en_route
+Votre marchandise pour la réservation #17 (Tunis vers Sfax) est en route.,info,marchandise_en_route
+Votre marchandise pour la réservation #3 (Sousse vers Monastir) est en route.,info,marchandise_en_route
+Votre marchandise pour la réservation #6 (Sousse vers Monastir) est en route.,info,marchandise_en_route
+Votre marchandise pour la réservation #8 (Sousse vers Monastir) est en route.,info,marchandise_en_route
+Votre marchandise pour la réservation #12 (Sousse vers Monastir) est en route.,info,marchandise_en_route
+Votre marchandise pour la réservation #17 (Sousse vers Monastir) est en route.,info,marchandise_en_route
+Votre marchandise pour la réservation #3 (Monastir vers Tunis) est en route.,info,marchandise_en_route
+Votre marchandise pour la réservation #6 (Monastir vers Tunis) est en route.,info,marchandise_en_route
+Votre marchandise pour la réservation #8 (Monastir vers Tunis) est en route.,info,marchandise_en_route
+Votre marchandise pour la réservation #12 (Monastir vers Tunis) est en route.,info,marchandise_en_route
+Votre marchandise pour la réservation #17 (Monastir vers Tunis) est en route.,info,marchandise_en_route
+Votre marchandise pour la réservation #3 (Nabeul vers Gabès) est en route.,info,marchandise_en_route
+Votre marchandise pour la réservation #6 (Nabeul vers Gabès) est en route.,info,marchandise_en_route
+Votre marchandise pour la réservation #8 (Nabeul vers Gabès) est en route.,info,marchandise_en_route
+Votre marchandise pour la réservation #12 (Nabeul vers Gabès) est en route.,info,marchandise_en_route
+Votre marchandise pour la réservation #17 (Nabeul vers Gabès) est en route.,info,marchandise_en_route
+Suivi de la réservation #3 (Tunis vers Sfax) : en route.,info,etape_en_route
+Suivi de la réservation #6 (Tunis vers Sfax) : en route.,info,etape_en_route
+Suivi de la réservation #8 (Tunis vers Sfax) : en route.,info,etape_en_route
+Suivi de la réservation #12 (Tunis vers Sfax) : en route.,info,etape_en_route
+Suivi de la réservation #17 (Tunis vers Sfax) : en route.,info,etape_en_route
+Suivi de la réservation #3 (Sousse vers Monastir) : en route.,info,etape_en_route
+Suivi de la réservation #6 (Sousse vers Monastir) : en route.,info,etape_en_route
+Suivi de la réservation #8 (Sousse vers Monastir) : en route.,info,etape_en_route
+Suivi de la réservation #12 (Sousse vers Monastir) : en route.,info,etape_en_route
+Suivi de la réservation #17 (Sousse vers Monastir) : en route.,info,etape_en_route
+Suivi de la réservation #3 (Monastir vers Tunis) : en route.,info,etape_en_route
+Suivi de la réservation #6 (Monastir vers Tunis) : en route.,info,etape_en_route
+Suivi de la réservation #8 (Monastir vers Tunis) : en route.,info,etape_en_route
+Suivi de la réservation #12 (Monastir vers Tunis) : en route.,info,etape_en_route
+Suivi de la réservation #17 (Monastir vers Tunis) : en route.,info,etape_en_route
+Suivi de la réservation #3 (Nabeul vers Gabès) : en route.,info,etape_en_route
+Suivi de la réservation #6 (Nabeul vers Gabès) : en route.,info,etape_en_route
+Suivi de la réservation #8 (Nabeul vers Gabès) : en route.,info,etape_en_route
+Suivi de la réservation #12 (Nabeul vers Gabès) : en route.,info,etape_en_route
+Suivi de la réservation #17 (Nabeul vers Gabès) : en route.,info,etape_en_route
+La livraison de votre réservation #3 (Tunis vers Sfax) est terminée.,info,livraison_terminee
+La livraison de votre réservation #6 (Tunis vers Sfax) est terminée.,info,livraison_terminee
+La livraison de votre réservation #8 (Tunis vers Sfax) est terminée.,info,livraison_terminee
+La livraison de votre réservation #12 (Tunis vers Sfax) est terminée.,info,livraison_terminee
+La livraison de votre réservation #17 (Tunis vers Sfax) est terminée.,info,livraison_terminee
+La livraison de votre réservation #3 (Sousse vers Monastir) est terminée.,info,livraison_terminee
+La livraison de votre réservation #6 (Sousse vers Monastir) est terminée.,info,livraison_terminee
+La livraison de votre réservation #8 (Sousse vers Monastir) est terminée.,info,livraison_terminee
+La livraison de votre réservation #12 (Sousse vers Monastir) est terminée.,info,livraison_terminee
+La livraison de votre réservation #17 (Sousse vers Monastir) est terminée.,info,livraison_terminee
+La livraison de votre réservation #3 (Monastir vers Tunis) est terminée.,info,livraison_terminee
+La livraison de votre réservation #6 (Monastir vers Tunis) est terminée.,info,livraison_terminee
+La livraison de votre réservation #8 (Monastir vers Tunis) est terminée.,info,livraison_terminee
+La livraison de votre réservation #12 (Monastir vers Tunis) est terminée.,info,livraison_terminee
+La livraison de votre réservation #17 (Monastir vers Tunis) est terminée.,info,livraison_terminee
+La livraison de votre réservation #3 (Nabeul vers Gabès) est terminée.,info,livraison_terminee
+La livraison de votre réservation #6 (Nabeul vers Gabès) est terminée.,info,livraison_terminee
+La livraison de votre réservation #8 (Nabeul vers Gabès) est terminée.,info,livraison_terminee
+La livraison de votre réservation #12 (Nabeul vers Gabès) est terminée.,info,livraison_terminee
+La livraison de votre réservation #17 (Nabeul vers Gabès) est terminée.,info,livraison_terminee
+Votre réservation #3 pour Tunis vers Sfax a été livrée. Pensez à évaluer le transporteur.,info,livraison_recue
+Votre réservation #6 pour Tunis vers Sfax a été livrée. Pensez à évaluer le transporteur.,info,livraison_recue
+Votre réservation #8 pour Tunis vers Sfax a été livrée. Pensez à évaluer le transporteur.,info,livraison_recue
+Votre réservation #12 pour Tunis vers Sfax a été livrée. Pensez à évaluer le transporteur.,info,livraison_recue
+Votre réservation #17 pour Tunis vers Sfax a été livrée. Pensez à évaluer le transporteur.,info,livraison_recue
+Votre réservation #3 pour Sousse vers Monastir a été livrée. Pensez à évaluer le transporteur.,info,livraison_recue
+Votre réservation #6 pour Sousse vers Monastir a été livrée. Pensez à évaluer le transporteur.,info,livraison_recue
+Votre réservation #8 pour Sousse vers Monastir a été livrée. Pensez à évaluer le transporteur.,info,livraison_recue
+Votre réservation #12 pour Sousse vers Monastir a été livrée. Pensez à évaluer le transporteur.,info,livraison_recue
+Votre réservation #17 pour Sousse vers Monastir a été livrée. Pensez à évaluer le transporteur.,info,livraison_recue
+Votre réservation #3 pour Monastir vers Tunis a été livrée. Pensez à évaluer le transporteur.,info,livraison_recue
+Votre réservation #6 pour Monastir vers Tunis a été livrée. Pensez à évaluer le transporteur.,info,livraison_recue
+Votre réservation #8 pour Monastir vers Tunis a été livrée. Pensez à évaluer le transporteur.,info,livraison_recue
+Votre réservation #12 pour Monastir vers Tunis a été livrée. Pensez à évaluer le transporteur.,info,livraison_recue
+Votre réservation #17 pour Monastir vers Tunis a été livrée. Pensez à évaluer le transporteur.,info,livraison_recue
+Votre réservation #3 pour Nabeul vers Gabès a été livrée. Pensez à évaluer le transporteur.,info,livraison_recue
+Votre réservation #6 pour Nabeul vers Gabès a été livrée. Pensez à évaluer le transporteur.,info,livraison_recue
+Votre réservation #8 pour Nabeul vers Gabès a été livrée. Pensez à évaluer le transporteur.,info,livraison_recue
+Votre réservation #12 pour Nabeul vers Gabès a été livrée. Pensez à évaluer le transporteur.,info,livraison_recue
+Votre réservation #17 pour Nabeul vers Gabès a été livrée. Pensez à évaluer le transporteur.,info,livraison_recue
+La réservation #3 pour Tunis vers Sfax a été annulée.,info,reservation_annulee
+La réservation #6 pour Tunis vers Sfax a été annulée.,info,reservation_annulee
+La réservation #8 pour Tunis vers Sfax a été annulée.,info,reservation_annulee
+La réservation #12 pour Tunis vers Sfax a été annulée.,info,reservation_annulee
+La réservation #17 pour Tunis vers Sfax a été annulée.,info,reservation_annulee
+La réservation #3 pour Sousse vers Monastir a été annulée.,info,reservation_annulee
+La réservation #6 pour Sousse vers Monastir a été annulée.,info,reservation_annulee
+La réservation #8 pour Sousse vers Monastir a été annulée.,info,reservation_annulee
+La réservation #12 pour Sousse vers Monastir a été annulée.,info,reservation_annulee
+La réservation #17 pour Sousse vers Monastir a été annulée.,info,reservation_annulee
+La réservation #3 pour Monastir vers Tunis a été annulée.,info,reservation_annulee
+La réservation #6 pour Monastir vers Tunis a été annulée.,info,reservation_annulee
+La réservation #8 pour Monastir vers Tunis a été annulée.,info,reservation_annulee
+La réservation #12 pour Monastir vers Tunis a été annulée.,info,reservation_annulee
+La réservation #17 pour Monastir vers Tunis a été annulée.,info,reservation_annulee
+La réservation #3 pour Nabeul vers Gabès a été annulée.,info,reservation_annulee
+La réservation #6 pour Nabeul vers Gabès a été annulée.,info,reservation_annulee
+La réservation #8 pour Nabeul vers Gabès a été annulée.,info,reservation_annulee
+La réservation #12 pour Nabeul vers Gabès a été annulée.,info,reservation_annulee
+La réservation #17 pour Nabeul vers Gabès a été annulée.,info,reservation_annulee
+"Merci pour votre confiance, le transport de la réservation #3 (Tunis vers Sfax) s'est bien déroulé.",info,service_remercie
+"Merci pour votre confiance, le transport de la réservation #6 (Tunis vers Sfax) s'est bien déroulé.",info,service_remercie
+"Merci pour votre confiance, le transport de la réservation #8 (Tunis vers Sfax) s'est bien déroulé.",info,service_remercie
+"Merci pour votre confiance, le transport de la réservation #12 (Tunis vers Sfax) s'est bien déroulé.",info,service_remercie
+"Merci pour votre confiance, le transport de la réservation #17 (Tunis vers Sfax) s'est bien déroulé.",info,service_remercie
+"Merci pour votre confiance, le transport de la réservation #3 (Sousse vers Monastir) s'est bien déroulé.",info,service_remercie
+"Merci pour votre confiance, le transport de la réservation #6 (Sousse vers Monastir) s'est bien déroulé.",info,service_remercie
+"Merci pour votre confiance, le transport de la réservation #8 (Sousse vers Monastir) s'est bien déroulé.",info,service_remercie
+"Merci pour votre confiance, le transport de la réservation #12 (Sousse vers Monastir) s'est bien déroulé.",info,service_remercie
+"Merci pour votre confiance, le transport de la réservation #17 (Sousse vers Monastir) s'est bien déroulé.",info,service_remercie
+"Merci pour votre confiance, le transport de la réservation #3 (Monastir vers Tunis) s'est bien déroulé.",info,service_remercie
+"Merci pour votre confiance, le transport de la réservation #6 (Monastir vers Tunis) s'est bien déroulé.",info,service_remercie
+"Merci pour votre confiance, le transport de la réservation #8 (Monastir vers Tunis) s'est bien déroulé.",info,service_remercie
+"Merci pour votre confiance, le transport de la réservation #12 (Monastir vers Tunis) s'est bien déroulé.",info,service_remercie
+"Merci pour votre confiance, le transport de la réservation #17 (Monastir vers Tunis) s'est bien déroulé.",info,service_remercie
+"Merci pour votre confiance, le transport de la réservation #3 (Nabeul vers Gabès) s'est bien déroulé.",info,service_remercie
+"Merci pour votre confiance, le transport de la réservation #6 (Nabeul vers Gabès) s'est bien déroulé.",info,service_remercie
+"Merci pour votre confiance, le transport de la réservation #8 (Nabeul vers Gabès) s'est bien déroulé.",info,service_remercie
+"Merci pour votre confiance, le transport de la réservation #12 (Nabeul vers Gabès) s'est bien déroulé.",info,service_remercie
+"Merci pour votre confiance, le transport de la réservation #17 (Nabeul vers Gabès) s'est bien déroulé.",info,service_remercie
