@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Affecter un chauffeur{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-4">Affecter un chauffeur</h1>
+
+<div class="card p-4 mb-4">
+  <p>
+    Sélectionnez une offre acceptée et un chauffeur disponible
+    avec un permis valide.
+  </p>
+
+  {% if form.errors %}
+  <div class="alert alert-danger" role="alert">
+    Affectation non enregistrée. Vérifiez les erreurs ci-dessous.
+  </div>
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-primary">
+      Affecter le chauffeur
+    </button>
+  </form>
+</div>
+
+<h2 class="h4 mb-3">Affectations enregistrées</h2>
+
+<div class="table-responsive">
+  <table class="table table-bordered align-middle">
+    <caption>Historique des affectations de vos chauffeurs</caption>
+
+    <thead>
+      <tr>
+        <th scope="col">Mission</th>
+        <th scope="col">Trajet</th>
+        <th scope="col">Chauffeur</th>
+        <th scope="col">Date d’affectation</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for affectation in affectations %}
+      <tr>
+        <td>Offre n° {{ affectation.proposition_id }}</td>
+
+        <td>
+          {{ affectation.proposition.demande.origin }}
+          →
+          {{ affectation.proposition.demande.destination }}
+        </td>
+
+        <td>{{ affectation.chauffeur }}</td>
+
+        <td>
+          {{ affectation.date_creation|date:"d/m/Y H:i" }}
+        </td>
+      </tr>
+
+      {% empty %}
+      <tr>
+        <td colspan="4" class="text-center">
+          Aucune affectation enregistrée.
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<a href="{% url 'chauffeurs:liste' %}" class="btn btn-secondary">
+  Mes chauffeurs
+</a>
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Mes chauffeurs{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between gap-3 mb-4">
+  <h1 class="h3">Mes chauffeurs</h1>
+
+  <a
+    href="{% url 'chauffeurs:ajouter' %}"
+    class="btn btn-primary"
+  >
+    Ajouter un chauffeur
+  </a>
+</div>
+
+<a
+  href="{% url 'chauffeurs:affecter' %}"
+  class="btn btn-outline-primary"
+>
+  Affecter un chauffeur
+</a>
+
+<form method="get" class="mb-4">
+  <label for="recherche" class="form-label">
+    Rechercher par nom ou prénom
+  </label>
+
+  <div class="d-flex flex-wrap gap-2">
+    <input
+      type="search"
+      id="recherche"
+      name="q"
+      value="{{ recherche }}"
+      class="form-control"
+    >
+
+    <button type="submit" class="btn btn-outline-primary">
+      Rechercher
+    </button>
+
+    <a
+      href="{% url 'chauffeurs:liste' %}"
+      class="btn btn-outline-secondary"
+    >
+      Réinitialiser
+    </a>
+  </div>
+</form>
+
+<div class="table-responsive">
+  <table class="table table-bordered table-striped align-middle">
+    <caption>Liste de vos chauffeurs et de leurs permis</caption>
+
+    <thead>
+      <tr>
+        <th scope="col">Nom complet</th>
+        <th scope="col">Téléphone</th>
+        <th scope="col">Disponibilité</th>
+        <th scope="col">Numéro du permis</th>
+        <th scope="col">Catégorie</th>
+        <th scope="col">Expiration</th>
+        <th scope="col">État du permis</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for chauffeur in chauffeurs %}
+      <tr>
+        <td>{{ chauffeur.prenom }} {{ chauffeur.nom }}</td>
+        <td>{{ chauffeur.telephone }}</td>
+
+        <td>
+          {% if chauffeur.disponible %}
+            Disponible
+          {% else %}
+            Indisponible
+          {% endif %}
+        </td>
+
+        {% if chauffeur.permis %}
+          <td>{{ chauffeur.permis.numero }}</td>
+          <td>{{ chauffeur.permis.categorie }}</td>
+          <td>
+            {{ chauffeur.permis.date_expiration|date:"d/m/Y" }}
+          </td>
+          <td>
+            {% if chauffeur.permis.est_expire %}
+              <span class="text-danger fw-bold">Expiré</span>
+            {% else %}
+              <span class="text-success fw-bold">Valide</span>
+            {% endif %}
+          </td>
+        {% else %}
+          <td colspan="4">Permis non renseigné</td>
+        {% endif %}
+
+        <td>
+          <div class="d-flex flex-wrap gap-2">
+            <a
+              href="{% url 'chauffeurs:modifier' chauffeur.pk %}"
+              class="btn btn-sm btn-outline-primary"
+            >
+              Modifier
+            </a>
+
+            <a
+              href="{% url 'chauffeurs:supprimer' chauffeur.pk %}"
+              class="btn btn-sm btn-outline-danger"
+            >
+              Supprimer
+            </a>
+          </div>
+        </td>
+      </tr>
+
+      {% empty %}
+      <tr>
+        <td colspan="8" class="text-center">
+          Aucun chauffeur trouvé.
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

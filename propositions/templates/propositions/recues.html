@@ -2,12 +2,13 @@
 {% block title %}Propositions reçues - CargoLink{% endblock %}
 
 {% block content %}
-<h3 class="mb-1">Propositions reçues</h3>
+<h1 class="h3 mb-1">Propositions reçues</h1>
 <p class="text-muted">Toutes les offres des transporteurs sur vos demandes. Ouvrez la comparaison pour choisir.</p>
 <div class="table-responsive">
-<table class="table table-hover bg-white align-middle">
+<div class="table-responsive"><table class="table table-hover bg-white align-middle">
+<caption class="visually-hidden">Propositions reçues</caption>
   <thead><tr>
-    <th>Demande</th><th>Transporteur</th><th>Véhicule</th><th>Prix</th><th>Durée</th><th>Statut</th><th></th>
+    <th scope="col">Demande</th><th scope="col">Transporteur</th><th scope="col">Véhicule</th><th scope="col">Prix</th><th scope="col">Durée</th><th scope="col">Statut</th><th scope="col"><span class="visually-hidden">Actions</span></th>
   </tr></thead>
   <tbody>
   {% for p in propositions %}
@@ -26,6 +27,6 @@
     </td></tr>
   {% endfor %}
   </tbody>
-</table>
+</table></div>
 </div>
 {% endblock %}

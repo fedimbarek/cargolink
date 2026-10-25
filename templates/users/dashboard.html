@@ -1,72 +1,252 @@
 {% extends "base.html" %}
-{% block title %}Dashboard - CargoLink{% endblock %}
+
+{% block title %}Tableau de bord — CargoLink{% endblock %}
 
 {% block content %}
-<h3 class="mb-4">Bonjour {{ user.username }} 👋</h3>
+<h1 class="h3 mb-4">Bonjour {{ user.username }}</h1>
 
-{% if user.role == "PME" %}
-  <div class="row g-3">
-    <div class="col-md-4">
-      <div class="card h-100"><div class="card-body">
-        <h5>Mes demandes de transport</h5>
-        <p class="text-muted">Publier et gérer vos demandes.</p>
-        <a class="btn btn-primary btn-sm" href="{% url 'annonces:liste' %}">Mes demandes</a>
-        <a class="btn btn-outline-primary btn-sm" href="{% url 'annonces:creer' %}">+ Nouvelle</a>
-      </div></div>
+{% if user.is_superuser or user.role == "ADMIN" %}
+
+  <!-- Administrateur -->
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <section class="card">
+        <div class="card-body p-4">
+          <h2 class="h5">Administration de CargoLink</h2>
+
+          <p class="text-muted">
+            Gérez les utilisateurs, validez les transporteurs
+            et consultez les données de la plateforme.
+          </p>
+
+          {% if user.is_staff %}
+          <a href="{% url 'admin:index' %}" class="btn btn-primary">
+            Ouvrir l’administration
+          </a>
+          {% else %}
+          <div class="alert alert-warning" role="alert">
+            L’accès à l’administration Django nécessite
+            également les droits Staff.
+          </div>
+          {% endif %}
+        </div>
+      </section>
     </div>
+  </div>
+
+{% elif user.role == "PME" %}
+
+  <!-- PME -->
+  <div class="row g-4">
     <div class="col-md-4">
-      <div class="card h-100"><div class="card-body">
-        <h5>Propositions reçues</h5>
-        <p class="text-muted">Comparer et choisir un transporteur.</p>
-        <a class="btn btn-primary btn-sm" href="{% url 'propositions:recues' %}">Voir les offres</a>
-      </div></div>
+      <section class="card h-100">
+        <div class="card-body p-4">
+          <h2 class="h5">Mes demandes de transport</h2>
+
+          <p class="text-muted">
+            Publiez et gérez vos demandes de transport.
+          </p>
+
+          <div class="d-flex flex-wrap gap-2">
+            <a
+              href="{% url 'annonces:liste' %}"
+              class="btn btn-primary btn-sm"
+            >
+              Mes demandes
+            </a>
+
+            <a
+              href="{% url 'annonces:creer' %}"
+              class="btn btn-outline-primary btn-sm"
+            >
+              Nouvelle demande
+            </a>
+          </div>
+        </div>
+      </section>
     </div>
+
     <div class="col-md-4">
-      <div class="card h-100"><div class="card-body">
-        <h5>Factures</h5>
-        <p class="text-muted">Consulter les factures et leurs paiements.</p>
-        <a class="btn btn-primary btn-sm" href="{% url 'factures:liste' %}">Mes factures</a>
-      </div></div>
+      <section class="card h-100">
+        <div class="card-body p-4">
+          <h2 class="h5">Propositions reçues</h2>
+
+          <p class="text-muted">
+            Comparez les offres et choisissez un transporteur.
+          </p>
+
+          <a
+            href="{% url 'propositions:recues' %}"
+            class="btn btn-primary btn-sm"
+          >
+            Voir les offres
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-md-4">
+      <section class="card h-100">
+        <div class="card-body p-4">
+          <h2 class="h5">Factures</h2>
+
+          <p class="text-muted">
+            Consultez vos factures et les paiements associés.
+          </p>
+
+          <a
+            href="{% url 'factures:liste' %}"
+            class="btn btn-primary btn-sm"
+          >
+            Mes factures
+          </a>
+        </div>
+      </section>
     </div>
   </div>
 
 {% elif user.role == "TRANSPORTEUR" %}
+
+  <!-- Transporteur -->
   {% if not user.transporteur.verified %}
-    <div class="alert alert-warning">
-      Votre compte est <strong>en attente de validation</strong> par l'administrateur.
-    </div>
+  <div class="alert alert-warning" role="alert">
+    Votre compte est en attente de validation.
+    L’administrateur doit valider votre profil
+    avant l’envoi de vos propositions.
+  </div>
   {% endif %}
-  <div class="row g-3">
-    <div class="col-md-4">
-      <div class="card h-100"><div class="card-body">
-        <h5>Demandes disponibles</h5>
-        <p class="text-muted">Consulter et filtrer les demandes.</p>
-        <a class="btn btn-primary btn-sm" href="{% url 'annonces:liste' %}">Demandes</a>
-        <a class="btn btn-outline-primary btn-sm" href="{% url 'propositions:matching' %}">Matching</a>
-      </div></div>
+
+  <div class="row g-4">
+    <div class="col-md-6 col-xl-4">
+      <section class="card h-100">
+        <div class="card-body p-4">
+          <h2 class="h5">Demandes disponibles</h2>
+
+          <p class="text-muted">
+            Consultez les besoins de transport des PME.
+          </p>
+
+          <div class="d-flex flex-wrap gap-2">
+            <a
+              href="{% url 'annonces:liste' %}"
+              class="btn btn-primary btn-sm"
+            >
+              Demandes
+            </a>
+
+            <a
+              href="{% url 'propositions:matching' %}"
+              class="btn btn-outline-primary btn-sm"
+            >
+              Matching
+            </a>
+          </div>
+        </div>
+      </section>
     </div>
-    <div class="col-md-4">
-      <div class="card h-100"><div class="card-body">
-        <h5>Mes véhicules et propositions</h5>
-        <p class="text-muted">Gérer vos véhicules, faire des offres.</p>
-        <a class="btn btn-primary btn-sm" href="{% url 'propositions:vehicules' %}">Véhicules</a>
-        <a class="btn btn-outline-primary btn-sm" href="{% url 'propositions:mes_propositions' %}">Mes propositions</a>
-      </div></div>
+
+    <div class="col-md-6 col-xl-4">
+      <section class="card h-100">
+        <div class="card-body p-4">
+          <h2 class="h5">Mes véhicules</h2>
+
+          <p class="text-muted">
+            Gérez vos véhicules et leurs capacités.
+          </p>
+
+          <a
+            href="{% url 'propositions:vehicules' %}"
+            class="btn btn-primary btn-sm"
+          >
+            Gérer les véhicules
+          </a>
+        </div>
+      </section>
     </div>
-    <div class="col-md-4">
-      <div class="card h-100"><div class="card-body">
-        <h5>Facturation</h5>
-        <p class="text-muted">Facturer les missions livrées, suivre les paiements.</p>
-        <a class="btn btn-primary btn-sm" href="{% url 'factures:liste' %}">Mes factures</a>
-      </div></div>
+
+    <div class="col-md-6 col-xl-4">
+      <section class="card h-100">
+        <div class="card-body p-4">
+          <h2 class="h5">Mes chauffeurs</h2>
+
+          <p class="text-muted">
+            Gérez vos chauffeurs et leurs permis de conduire.
+          </p>
+
+          <a
+            href="{% url 'chauffeurs:liste' %}"
+            class="btn btn-primary btn-sm"
+          >
+            Gérer les chauffeurs
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-md-6 col-xl-4">
+      <section class="card h-100">
+        <div class="card-body p-4">
+          <h2 class="h5">Mes propositions</h2>
+
+          <p class="text-muted">
+            Consultez vos offres et leur statut.
+          </p>
+
+          <a
+            href="{% url 'propositions:mes_propositions' %}"
+            class="btn btn-primary btn-sm"
+          >
+            Voir mes offres
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-md-6 col-xl-4">
+      <section class="card h-100">
+        <div class="card-body p-4">
+          <h2 class="h5">Affectations</h2>
+
+          <p class="text-muted">
+            Affectez un chauffeur disponible à une offre acceptée.
+          </p>
+
+          <a
+            href="{% url 'chauffeurs:affecter' %}"
+            class="btn btn-primary btn-sm"
+          >
+            Affecter un chauffeur
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-md-6 col-xl-4">
+      <section class="card h-100">
+        <div class="card-body p-4">
+          <h2 class="h5">Facturation</h2>
+
+          <p class="text-muted">
+            Consultez vos factures et les paiements.
+          </p>
+
+          <a
+            href="{% url 'factures:liste' %}"
+            class="btn btn-primary btn-sm"
+          >
+            Mes factures
+          </a>
+        </div>
+      </section>
     </div>
   </div>
 
 {% else %}
-  <div class="card"><div class="card-body">
-    <h5>Espace administrateur</h5>
-    <p class="text-muted">Valider les transporteurs, gérer les utilisateurs.</p>
-    <a class="btn btn-primary" href="/admin/">Ouvrir l'administration</a>
-  </div></div>
+
+  <div class="alert alert-warning" role="alert">
+    Aucun tableau de bord n’est configuré pour votre rôle.
+    Contactez l’administrateur.
+  </div>
+
 {% endif %}
 {% endblock %}

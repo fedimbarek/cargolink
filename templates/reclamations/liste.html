@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Réclamations - CargoLink{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>
+        {% if est_transporteur %}Réclamations me concernant{% elif mode_toutes %}Toutes les réclamations{% else %}Mes réclamations{% endif %}
+    </h3>
+    <a href="{% url 'reclamations:creer' %}" class="btn btn-primary">
+        + Nouvelle réclamation
+    </a>
+</div>
+
+{% if reclamations %}
+<div class="table-responsive">
+    <table class="table table-hover align-middle bg-white shadow-sm">
+        <thead class="table-primary">
+            <tr>
+                <th>#</th>
+                <th>Sujet</th>
+                <th>Statut</th>
+                <th>Priorité</th>
+                <th>Créateur</th>
+                <th>Destinataire</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rec in reclamations %}
+            <tr>
+                <td>{{ rec.id }}</td>
+                <td>
+                    <a href="{% url 'reclamations:detail' rec.pk %}" class="text-decoration-none fw-semibold">
+                        {{ rec.sujet }}
+                    </a>
+                </td>
+                <td>
+                    <span class="badge bg-{% if rec.statut == 'NOUVELLE' %}primary{% elif rec.statut == 'EN_COURS' %}warning text-dark{% elif rec.statut == 'RESOLUE' %}success{% else %}secondary{% endif %}">
+                        {{ rec.get_statut_display }}
+                    </span>
+                </td>
+                <td>
+                    <span class="badge bg-{% if rec.priorite == 'CRITIQUE' %}danger{% elif rec.priorite == 'HAUTE' %}warning text-dark{% elif rec.priorite == 'MOYENNE' %}info text-dark{% else %}secondary{% endif %}">
+                        {{ rec.get_priorite_display }}
+                    </span>
+                </td>
+                <td>{{ rec.utilisateur.username }}</td>
+                <td>
+                    {% if rec.destinataire %}
+                        {{ rec.destinataire.username }}
+                    {% else %}
+                        <span class="text-muted">—</span>
+                    {% endif %}
+                </td>
+                <td><small>{{ rec.date_creation|date:"d/m/Y H:i" }}</small></td>
+                <td>
+                    <a href="{% url 'reclamations:detail' rec.pk %}" class="btn btn-sm btn-outline-primary">Voir</a>
+                    {% if est_support %}
+                    <a href="{% url 'reclamations:modifier' rec.pk %}" class="btn btn-sm btn-outline-secondary">Modifier</a>
+                    <a href="{% url 'reclamations:supprimer' rec.pk %}" class="btn btn-sm btn-outline-danger">Supprimer</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info" role="alert">
+    {% if est_transporteur %}
+        Aucune réclamation ne vous est adressée pour le moment.
+    {% else %}
+        Aucune réclamation pour le moment.
+        <a href="{% url 'reclamations:creer' %}" class="alert-link">Créer la première</a>.
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

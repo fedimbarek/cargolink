@@ -26,3 +26,6 @@ def register_page(request):
 @login_required
 def dashboard(request):
     return render(request, "users/dashboard.html")
+
+def accueil(request):
+    return render(request, "users/accueil.html")

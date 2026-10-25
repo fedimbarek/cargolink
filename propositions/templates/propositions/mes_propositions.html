@@ -2,9 +2,10 @@
 {% block title %}Mes propositions - CargoLink{% endblock %}
 
 {% block content %}
-<h3 class="mb-3">Mes propositions</h3>
-<table class="table bg-white align-middle">
-  <thead><tr><th>Demande</th><th>Véhicule</th><th>Prix</th><th>Durée</th><th>Statut</th><th></th></tr></thead>
+<h1 class="h3 mb-3">Mes propositions</h1>
+<div class="table-responsive"><table class="table bg-white align-middle">
+<caption class="visually-hidden">Mes propositions</caption>
+  <thead><tr><th scope="col">Demande</th><th scope="col">Véhicule</th><th scope="col">Prix</th><th scope="col">Durée</th><th scope="col">Statut</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr></thead>
   <tbody>
   {% for p in propositions %}
     <tr>
@@ -24,5 +25,5 @@
     <tr><td colspan="6" class="text-center text-muted py-4">Aucune proposition.</td></tr>
   {% endfor %}
   </tbody>
-</table>
+</table></div>
 {% endblock %}

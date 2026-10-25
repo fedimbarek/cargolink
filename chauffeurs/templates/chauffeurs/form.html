@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}{{ titre }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <h1 class="h3 mb-4">{{ titre }}</h1>
+
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+
+        {% if form.errors or permis_form.errors %}
+        <div class="alert alert-danger" role="alert">
+          Enregistrement non effectué.
+          Corrigez les erreurs indiquées sous les champs.
+        </div>
+        {% endif %}
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+
+          <fieldset class="mb-4">
+            <legend class="h5 mb-3">
+              Informations du chauffeur
+            </legend>
+
+            {{ form.non_field_errors }}
+
+            {% for field in form %}
+            <div class="mb-3">
+              {{ field.label_tag }}
+              {{ field }}
+
+              {% for error in field.errors %}
+              <div class="text-danger mt-1">
+                {{ error }}
+              </div>
+              {% endfor %}
+            </div>
+            {% endfor %}
+          </fieldset>
+
+          <fieldset class="mb-4">
+            <legend class="h5 mb-3">
+              Permis de conduire
+            </legend>
+
+            {{ permis_form.non_field_errors }}
+
+            {% for field in permis_form %}
+            <div class="mb-3">
+              {{ field.label_tag }}
+              {{ field }}
+
+              {% for error in field.errors %}
+              <div class="text-danger mt-1">
+                {{ error }}
+              </div>
+              {% endfor %}
+            </div>
+            {% endfor %}
+          </fieldset>
+
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">
+              Enregistrer
+            </button>
+
+            <a
+              href="{% url 'chauffeurs:liste' %}"
+              class="btn btn-outline-secondary"
+            >
+              Annuler
+            </a>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

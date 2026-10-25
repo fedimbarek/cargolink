@@ -25,3 +25,6 @@ media/
 .coverage
 htmlcov/
 .pytest_cache/
+
+# Render / statiques collectés
+staticfiles/

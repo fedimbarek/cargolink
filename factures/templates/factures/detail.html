@@ -4,7 +4,7 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-start mb-3">
   <div>
-    <h3 class="mb-1">{{ f.numero }} · {{ f.trajet }}</h3>
+    <h1 class="h3 mb-1">{{ f.numero }} · {{ f.trajet }}</h1>
     <span class="badge {{ f.badge_class }}">{{ f.get_status_display }}</span>
     {% if f.en_retard %}<span class="badge bg-danger">En retard</span>{% endif %}
     <a class="small ms-2" href="{% url 'annonces:detail' f.demande.pk %}">Demande #{{ f.demande.pk }}</a>
@@ -30,9 +30,10 @@
     </div></div>
 
     <div class="card"><div class="card-body">
-      <h5 class="mb-3">Paiements</h5>
-      <table class="table table-sm align-middle mb-0">
-        <thead><tr><th>Date</th><th>Montant</th><th>Mode</th><th>Référence</th><th></th></tr></thead>
+      <h2 class="h5 mb-3">Paiements</h2>
+      <div class="table-responsive"><table class="table table-sm align-middle mb-0">
+<caption class="visually-hidden">Paiements enregistrés</caption>
+        <thead><tr><th scope="col">Date</th><th scope="col">Montant</th><th scope="col">Mode</th><th scope="col">Référence</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr></thead>
         <tbody>
         {% for p in paiements %}
           <tr>
@@ -51,14 +52,14 @@
           <tr><td colspan="5" class="text-muted text-center py-3">Aucun paiement.</td></tr>
         {% endfor %}
         </tbody>
-      </table>
+      </table></div>
     </div></div>
   </div>
 
   <div class="col-md-5">
     {% if est_transporteur %}
     <div class="card mb-3"><div class="card-body">
-      <h6>Actions</h6>
+      <h2 class="h6">Actions</h2>
       {% if f.peut_emettre %}
         <form method="post" action="{% url 'factures:emettre' f.pk %}" class="mb-2"
               onsubmit="return confirm('Émettre la facture ? Elle ne sera plus modifiable.');">
@@ -85,7 +86,7 @@
 
     {% if paiement_form %}
     <div class="card"><div class="card-body">
-      <h6>Enregistrer un paiement</h6>
+      <h2 class="h6">Enregistrer un paiement</h2>
       <form method="post" action="{% url 'factures:paiement_ajouter' f.pk %}">
         {% csrf_token %}
         {% for field in paiement_form %}
