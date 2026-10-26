@@ -102,6 +102,10 @@ def creer_reservation(proposition):
         },
     )
     if cree:
+        if proposition.status == proposition.Status.ACCEPTED:
+            from factures.services import creer_facture, echeance_par_defaut
+
+            creer_facture(proposition, echeance_par_defaut())
         EtapeSuivi.objects.create(reservation=reservation, type=EtapeSuivi.Type.CONFIRMATION)
         notifier(
             reservation.user,
