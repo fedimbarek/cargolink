@@ -9,6 +9,7 @@ from rest_framework.test import APITestCase
 
 from annonces.models import DemandeTransport
 from evaluations.services import ErreurEvaluation, evaluer
+from factures.models import Facture
 from ml.service import analyser_notifications
 from propositions.models import Proposition, Vehicle
 from propositions.services import accepter_proposition
@@ -92,6 +93,7 @@ class ServicesTests(Base, TestCase):
             with self.captureOnCommitCallbacks(execute=True):
                 reservation = services.creer_reservation(self.p2)
 
+        self.assertFalse(Facture.objects.filter(proposition=self.p2).exists())
         appels = [appel.kwargs["json"] for appel in envoyer.call_args_list]
         email_pme = next(
             email for email in appels
@@ -111,6 +113,10 @@ class ServicesTests(Base, TestCase):
     def test_acceptation_cree_reservation_et_notifie(self):
         self.assertEqual(self.r.status, Reservation.Status.CONFIRMEE)
         self.assertEqual(self.r.etapes.count(), 1)
+        facture = Facture.objects.get(proposition=self.p1)
+        self.assertEqual(facture.status, Facture.Status.BROUILLON)
+        self.assertEqual(facture.montant_ht, self.p1.price)
+        self.assertEqual(facture.date_echeance, timezone.localdate() + timedelta(days=30))
         self.assertTrue(self.u_tr.notifications_suivi.exists())
         self.assertTrue(self.u_pme.notifications_suivi.exists())
         self.assertFalse(Reservation.objects.filter(proposition=self.p2).exists())

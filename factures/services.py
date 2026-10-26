@@ -1,6 +1,6 @@
 """
 Logique métier du module factures.
-  - creer_facture()          : seulement pour une proposition acceptée (demande assignée/en cours/livrée),
+  - creer_facture()          : pour une proposition acceptée (demande assignée/en cours/livrée),
                                une seule facture par proposition
   - emettre() / annuler()    : changement d'état de la facture
   - enregistrer_paiement() / modifier_paiement() / supprimer_paiement()
@@ -28,14 +28,14 @@ class ErreurFacture(Exception):
 
 
 def factures_visibles(user):
-    """Transporteur: ses factures. PME: factures reçues (jamais les brouillons). Admin: tout."""
+    """Transporteur et PME voient leurs factures, y compris les brouillons; admin: tout."""
     qs = (Facture.objects
           .select_related("proposition__demande__pme", "proposition__transporteur")
           .prefetch_related("paiements"))
     if user.role == "TRANSPORTEUR":
         return qs.filter(proposition__transporteur__user=user)
     if user.role == "PME":
-        return qs.filter(proposition__demande__pme__user=user).exclude(status=S.BROUILLON)
+        return qs.filter(proposition__demande__pme__user=user)
     if user.role == "ADMIN" or user.is_superuser:
         return qs
     return qs.none()
@@ -49,8 +49,12 @@ def echeance_par_defaut():
     return timezone.localdate() + timedelta(days=DELAI_DEFAUT_JOURS)
 
 
-# Une facture n'est autorisée que pour une mission déjà livrée.
-STATUTS_FACTURABLES = (DemandeTransport.Status.DELIVERED,)
+# Le brouillon est créé dès la réservation et visible par les deux parties.
+STATUTS_FACTURABLES = (
+    DemandeTransport.Status.ASSIGNED,
+    DemandeTransport.Status.IN_PROGRESS,
+    DemandeTransport.Status.DELIVERED,
+)
 
 
 def est_facturable(proposition):
