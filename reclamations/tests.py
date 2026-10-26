@@ -3,8 +3,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from reclamations.models import Reclamation
 import os
-from reclamations.services import predire_priorite, entrainer_modele, MODEL_PATH
-
+from reclamations.MLReclamations import predire_priorite, entrainer_modele, MODEL_PATH
 User = get_user_model()
 
 
