@@ -1,15 +1,21 @@
+import json
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from django.contrib import messages
 from django.db.models import Q
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 from .models import Reclamation
 from .forms import ReclamationForm
-from .services import predire_priorite
+from .MLReclamations import (
+    predire_priorite,
+    predire_priorite_avec_proba,
+    suggerer_et_appliquer,
+)
 
 
 def _est_admin(user):
-    """Admin = superuser, staff, ou rôle différent de PME/TRANSPORTEUR."""
     if not user.is_authenticated:
         return False
     if user.is_superuser or user.is_staff:
@@ -33,14 +39,9 @@ class ReclamationListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         qs = Reclamation.objects.select_related('utilisateur', 'destinataire').all()
         user = self.request.user
-
-        if _est_admin(user):
-            return qs  # Admin voit tout
-        if _est_pme(user):
-            return qs  # PME voit tout (selon votre demande)
+        if _est_admin(user) or _est_pme(user):
+            return qs
         if _est_transporteur(user):
-            # Transporteur ne voit QUE les réclamations qui lui sont adressées
-            # OU qu'il a lui-même créées
             return qs.filter(Q(destinataire=user) | Q(utilisateur=user))
         return qs.none()
 
@@ -50,6 +51,8 @@ class ReclamationListView(LoginRequiredMixin, ListView):
         ctx['est_pme'] = _est_pme(self.request.user)
         ctx['est_transporteur'] = _est_transporteur(self.request.user)
         ctx['mode_toutes'] = _est_admin(self.request.user) or _est_pme(self.request.user)
+        # Récupère la suggestion IA laissée par la création, puis la consomme
+        ctx['ai_suggestion'] = self.request.session.pop('ai_suggestion', None)
         return ctx
 
 
@@ -61,12 +64,28 @@ class ReclamationCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.utilisateur = self.request.user
+        # 🤖 IA : calcule la priorité et l'APPLIQUE (modifie form.instance.priorite)
         try:
-            suggestion = predire_priorite(form.cleaned_data.get('description', ''))
-            messages.info(self.request, f"🤖 Priorité suggérée par l'IA : {suggestion}")
-        except Exception:
-            pass
-        return super().form_valid(form)
+            resultat = suggerer_et_appliquer(form.instance)
+            ai_data = {
+                'priorite': resultat['priorite'],
+                'probabilites': resultat['probabilites'],
+                'sujet': form.instance.sujet,
+                'reclamation_id': None,  # rempli après save
+                'erreur': None,
+            }
+        except Exception as e:
+            ai_data = {
+                'priorite': form.instance.priorite,
+                'probabilites': {},
+                'sujet': form.instance.sujet,
+                'reclamation_id': None,
+                'erreur': str(e),
+            }
+        response = super().form_valid(form)  # ← sauvegarde la réclamation
+        ai_data['reclamation_id'] = form.instance.pk
+        self.request.session['ai_suggestion'] = ai_data
+        return response
 
 
 class ReclamationDetailView(LoginRequiredMixin, DetailView):
@@ -104,3 +123,19 @@ class ReclamationDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteV
     permission_required = 'reclamations.delete_reclamation'
     raise_exception = True
     success_url = reverse_lazy('reclamations:liste')
+
+
+@login_required
+@require_POST
+def suggerer_ia_api(request):
+    """Endpoint AJAX : prédit la priorité sans sauvegarder."""
+    try:
+        data = json.loads(request.body)
+        description = data.get('description', '').strip()
+        if not description:
+            return JsonResponse({'error': 'Description vide'}, status=400)
+        priorite = predire_priorite(description)
+        probabilites = predire_priorite_avec_proba(description)
+        return JsonResponse({'priorite': priorite, 'probabilites': probabilites})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

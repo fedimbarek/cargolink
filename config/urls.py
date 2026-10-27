@@ -38,6 +38,8 @@ urlpatterns = [
     path('meteo/', include('meteo.web_urls')),
     path('factures/', include('factures.web_urls')),
     path('ia/', include('ia.web_urls')),
+    path('reservations/', include('reservations.web_urls')),
+    path('evaluations/', include('evaluations.web_urls')),
     path('api/auth/', include('users.urls')),
     path('api/annonces/', include('annonces.urls')),
     path('api/propositions/', include('propositions.urls')),

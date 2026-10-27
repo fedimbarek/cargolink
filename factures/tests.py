@@ -79,6 +79,14 @@ class ModelEtServicesTests(Base, TestCase):
         with self.assertRaises(services.ErreurFacture):
             services.creer_facture(r2, self.echeance())
 
+    def test_mission_acceptee_facturable_des_l_attribution(self):
+        r = self._proposition(livree=False)
+        DemandeTransport.objects.filter(pk=r.demande_id).update(status=DemandeTransport.Status.ASSIGNED)
+        r.demande.refresh_from_db()
+        self.assertTrue(services.est_facturable(r))
+        facture = services.creer_facture(r, self.echeance())
+        self.assertEqual(facture.montant_ht, r.price)
+
     def test_une_seule_facture_par_proposition(self):
         self.facture()
         with self.assertRaises(services.ErreurFacture):
@@ -171,11 +179,15 @@ class FactureApiTests(Base, APITestCase):
     def test_sans_authentification(self):
         self.assertEqual(self.client.get(self.URL).status_code, 401)
 
-    def test_pme_ne_voit_pas_les_brouillons(self):
+    def test_pme_voit_le_brouillon_en_lecture_seule(self):
         f = self.facture()
         self.client.force_authenticate(self.u_pme)
-        self.assertEqual(len(self.client.get(self.URL).data), 0)
-        self.assertEqual(self.client.get(f"{self.URL}{f.pk}/").status_code, 404)
+        self.assertEqual(len(self.client.get(self.URL).data), 1)
+        self.assertEqual(self.client.get(f"{self.URL}{f.pk}/").data["status"], "BROUILLON")
+        self.assertEqual(self.client.patch(
+            f"{self.URL}{f.pk}/", {"notes": "Modification"}, format="json"
+        ).status_code, 403)
+        self.assertEqual(self.client.post(f"{self.URL}{f.pk}/emettre/").status_code, 403)
         services.emettre(f)
         self.assertEqual(len(self.client.get(self.URL).data), 1)
         self.assertEqual(self.client.get(f"{self.URL}{f.pk}/").data["transporteur"], "Trans SARL")
@@ -330,10 +342,10 @@ class WebTests(Base, TestCase):
             "montant": "9999", "date_paiement": str(timezone.localdate()), "mode": "ESPECES", "reference": ""})
         self.assertFalse(Paiement.objects.exists())
 
-    def test_la_pme_voit_la_facture_emise_pas_le_brouillon(self):
+    def test_la_pme_voit_le_brouillon_puis_la_facture_emise_sans_actions(self):
         f = self.facture()
         self.client.force_login(self.u_pme)
-        self.assertEqual(self.client.get(reverse("factures:detail", args=[f.pk])).status_code, 404)
+        self.assertContains(self.client.get(reverse("factures:detail", args=[f.pk])), f.numero)
         services.emettre(f)
         rep = self.client.get(reverse("factures:detail", args=[f.pk]))
         self.assertContains(rep, f.numero)

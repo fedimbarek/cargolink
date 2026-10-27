@@ -6,6 +6,7 @@ app_name = "factures"
 
 urlpatterns = [
     path("", views.liste, name="liste"),
+    path("bilan/", views.bilan, name="bilan"), 
     path("nouvelle/", views.nouvelle, name="nouvelle"),
     path("creer/<int:proposition_id>/", views.creer, name="creer"),
     path("<int:pk>/", views.detail, name="detail"),

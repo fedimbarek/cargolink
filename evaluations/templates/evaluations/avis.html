@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Avis - {{ transporteur }} - CargoLink{% endblock %}
+
+{% block content %}
+<h3 class="mb-3">Avis sur {{ transporteur }}</h3>
+<p class="text-muted">Note moyenne : {{ transporteur.rating }}/5</p>
+<div class="list-group">
+  {% for evaluation in evaluations %}
+    <div class="list-group-item">
+      <div class="d-flex justify-content-between">
+        <strong class="text-warning">{{ evaluation.etoiles }}</strong>
+        <span class="small text-muted">{{ evaluation.created_at|date:"d/m/Y" }}</span>
+      </div>
+      <div class="small text-muted">Par {{ evaluation.reservation.pme }}</div>
+      {% if evaluation.commentaire %}<p class="mb-0 mt-2">{{ evaluation.commentaire }}</p>{% endif %}
+    </div>
+  {% empty %}
+    <div class="alert alert-info">Aucun avis pour le moment.</div>
+  {% endfor %}
+</div>
+{% endblock %}

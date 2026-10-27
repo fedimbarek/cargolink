@@ -71,7 +71,7 @@ INSTALLED_APPS = [
     'evaluations',
     'meteo',
     'factures',
-    'ia',
+    'ia',               # intelligence artificielle: estimation du prix (machine learning)
     'reclamations',
     'chauffeurs',
 ]
@@ -99,6 +99,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'reservations.context_processors.notifications',
             ],
         },
     },
@@ -186,7 +187,15 @@ MAILERS = {
     },
 }
 
+# --- Notifications par e-mail (API Brevo) ---
+# Utilisées par reservations/services.py. Sans clé API, aucun e-mail n'est envoyé.
+BREVO_API_KEY = os.environ.get("BREVO_API_KEY", "")
+BREVO_SENDER_EMAIL = os.environ.get("BREVO_SENDER_EMAIL", "")
+BREVO_SENDER_NAME = os.environ.get("BREVO_SENDER_NAME", "CargoLink")
+SITE_URL = os.environ.get("SITE_URL", "http://127.0.0.1:8000")
 
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
 # --- CargoLink ---
 AUTH_USER_MODEL = 'users.User'
 

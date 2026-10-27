@@ -28,9 +28,7 @@
       <td><span class="badge {{ p.badge_class }}">{{ p.get_status_display }}</span></td>
       <td>
         {% if p.status == "PENDING" and d.status == "OPEN" %}
-          <form method="post" action="{% url 'propositions:accepter' p.pk %}"
-                onsubmit="return confirm('Accepter cette proposition ? Les autres seront refusées.');">
-            {% csrf_token %}<button class="btn btn-sm btn-success">Accepter</button></form>
+          <a class="btn btn-sm btn-success" href="{% url 'propositions:accepter' p.pk %}">Accepter</a>
         {% endif %}
       </td>
     </tr>

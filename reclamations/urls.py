@@ -9,4 +9,5 @@ urlpatterns = [
     path('<int:pk>/', views.ReclamationDetailView.as_view(), name='detail'),
     path('<int:pk>/modifier/', views.ReclamationUpdateView.as_view(), name='modifier'),
     path('<int:pk>/supprimer/', views.ReclamationDeleteView.as_view(), name='supprimer'),
+    path('api/suggerer/', views.suggerer_ia_api, name='suggerer_ia'),
 ]

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Réservations - CargoLink{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Mes réservations</h1>
+  <form method="get" class="d-flex gap-2">
+    <label class="visually-hidden" for="filtre-statut">Filtrer les réservations par statut</label>
+    <select id="filtre-statut" name="status" class="form-select form-select-sm">
+      <option value="">Tous les statuts</option>
+      {% for val, lab in statuts %}<option value="{{ val }}" {% if val == statut %}selected{% endif %}>{{ lab }}</option>{% endfor %}
+    </select>
+    <button type="submit" class="btn btn-sm btn-outline-primary">Filtrer</button>
+  </form>
+</div>
+
+{% if reservations %}
+<div class="table-responsive"><table class="table table-hover bg-white align-middle">
+  <caption class="visually-hidden">Liste de vos réservations et de leur statut</caption>
+  <thead><tr><th scope="col">#</th><th scope="col">Trajet</th><th scope="col">Chargement</th>
+    <th scope="col">{% if user.role == "PME" %}Transporteur{% else %}PME{% endif %}</th><th scope="col">Prix</th><th scope="col">Statut</th><th scope="col">Actions</th></tr></thead>
+  <tbody>
+  {% for r in reservations %}
+    <tr>
+      <td>{{ r.pk }}</td>
+      <td>{{ r.demande.origin }} → {{ r.demande.destination }}</td>
+      <td><time datetime="{{ r.demande.pickup_date|date:'c' }}">{{ r.demande.pickup_date|date:"d/m/Y H:i" }}</time></td>
+      <td>{% if user.role == "PME" %}{{ r.transporteur }}{% else %}{{ r.pme }}{% endif %}</td>
+      <td>{{ r.proposition.price }} TND</td>
+      <td><span class="badge {{ r.badge_class }}">{{ r.get_status_display }}</span></td>
+      <td><a class="btn btn-sm btn-outline-primary" href="{% url 'reservations:detail' r.pk %}" aria-label="Voir le suivi de la réservation {{ r.pk }}">Suivi</a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% else %}
+  <div class="alert alert-info">Aucune réservation pour le moment. Une réservation est créée quand la PME accepte une proposition.</div>
+{% endif %}
+{% endblock %}
