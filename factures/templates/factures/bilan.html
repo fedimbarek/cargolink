@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block title %}Bilan de facturation · CargoLink{% endblock %}
+{% block hero %}{% endblock %}   {# pas de bandeau sur cette page #}
+
+{% block content %}
+<style>
+  @media print {
+    .site-header, .site-footer, .skip-link, .d-print-none { display: none !important; }
+    body { background: white; }
+    .workspace { border: 0; box-shadow: none; padding: 0; }
+    .card, .table-responsive { break-inside: avoid; }
+  }
+</style>
+
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+  <h1 class="h3 mb-0">
+    Bilan de facturation {{ b.annee }}{% if b.mois %} · mois {{ b.mois|stringformat:"02d" }}{% endif %}
+  </h1>
+  <div class="d-flex gap-2 d-print-none">
+    <a href="{% url 'factures:liste' %}" class="btn btn-outline-secondary btn-sm">← Factures</a>
+    <button type="button" onclick="window.print()" class="btn btn-outline-primary btn-sm">Imprimer / PDF</button>
+  </div>
+</div>
+
+<form method="get" class="row g-2 mb-4 align-items-end d-print-none">
+  <div class="col-auto">
+    <label for="{{ form.annee.id_for_label }}">{{ form.annee.label }}</label>
+    {{ form.annee }}
+  </div>
+  <div class="col-auto">
+    <label for="{{ form.mois.id_for_label }}">{{ form.mois.label }}</label>
+    {{ form.mois }}
+  </div>
+  <div class="col-auto"><button class="btn btn-primary btn-sm">Afficher</button></div>
+  <!-- <div class="col-auto"><button class="btn btn-outline-primary btn-sm" name="ia" value="1">✨ Analyse IA</button></div> -->
+   <div class="col-auto"><button class="btn btn-outline-primary btn-sm" name="ia" value="1">✨ Analyse IA</button></div>
+</form>
+
+<!-- Indicateurs clés -->
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-3"><div class="card p-3 h-100">
+    <small class="text-muted">{% if est_pme %}Dépenses HT{% else %}Chiffre d'affaires HT{% endif %}</small>
+    <div class="h5 mb-0">{{ b.ca_ht }} TND</div></div></div>
+  <div class="col-6 col-lg-3"><div class="card p-3 h-100">
+    <small class="text-muted">Total TTC facturé</small>
+    <div class="h5 mb-0">{{ b.ttc }} TND</div></div></div>
+  <div class="col-6 col-lg-3"><div class="card p-3 h-100">
+    <small class="text-muted">{% if est_pme %}Déjà payé{% else %}Encaissé{% endif %}</small>
+    <div class="h5 mb-0 text-success">{{ b.paye }} TND</div></div></div>
+  <div class="col-6 col-lg-3"><div class="card p-3 h-100">
+    <small class="text-muted">Reste à {% if est_pme %}payer{% else %}encaisser{% endif %}</small>
+    <div class="h5 mb-0 text-danger">{{ b.reste }} TND</div></div></div>
+</div>
+
+<div class="row g-4 mb-4">
+  <!-- Situation -->
+  <div class="col-lg-6">
+    <div class="card h-100">
+      <div class="card-header">Situation de la période</div>
+      <table class="table table-sm mb-0">
+        <tbody>
+          <tr><td>Factures émises</td>
+              <td class="text-end">{{ b.nb_factures }} ({{ b.nb_payees }} payées, {{ b.nb_partielles }} partielles)</td></tr>
+          <tr><td>{% if est_pme %}Dépenses HT{% else %}Produits (CA) HT{% endif %}</td><td class="text-end">{{ b.ca_ht }}</td></tr>
+          <tr><td>{% if est_pme %}TVA déductible{% else %}TVA collectée (à reverser){% endif %}</td><td class="text-end">{{ b.tva }}</td></tr>
+          <tr class="fw-bold"><td>Total TTC</td><td class="text-end">{{ b.ttc }}</td></tr>
+          <tr><td>{% if est_pme %}Paiements effectués{% else %}Trésorerie encaissée{% endif %}</td><td class="text-end">{{ b.paye }}</td></tr>
+          <tr><td>{% if est_pme %}Dettes fournisseurs{% else %}Créances clients{% endif %} (période)</td><td class="text-end">{{ b.reste }}</td></tr>
+          <tr><td>Taux de recouvrement</td><td class="text-end">{{ b.taux_recouvrement }} %</td></tr>
+          <tr><td>Délai moyen de paiement</td>
+              <td class="text-end">{% if b.delai_moyen is not None %}{{ b.delai_moyen }} j{% else %}—{% endif %}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Balance âgée -->
+  <div class="col-lg-6">
+    <div class="card h-100">
+      <div class="card-header">Balance âgée (toutes périodes) · total {{ b.creances }} TND</div>
+      <div class="card-body">
+        <canvas id="chartAge" height="170" role="img"
+                aria-label="Montants restant à payer par ancienneté de retard"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header">Évolution mensuelle {{ b.annee }} (TTC)</div>
+  <div class="card-body">
+    <canvas id="chartMois" height="90" role="img" aria-label="Montants facturés et encaissés par mois"></canvas>
+  </div>
+</div>
+
+<!-- Par partenaire -->
+<h2 class="h5">Détail par {% if est_pme %}transporteur{% else %}client{% endif %}</h2>
+<div class="table-responsive mb-4">
+  <table class="table table-sm">
+    <thead>
+      <tr><th>Nom</th><th class="text-end">Factures</th><th class="text-end">Total TTC</th>
+          <th class="text-end">Payé</th><th class="text-end">Reste</th><th class="text-end">Part</th></tr>
+    </thead>
+    <tbody>
+      {% for p in b.partenaires %}
+      <tr><td>{{ p.nom }}</td><td class="text-end">{{ p.nb }}</td><td class="text-end">{{ p.ttc }}</td>
+          <td class="text-end">{{ p.paye }}</td><td class="text-end">{{ p.reste }}</td>
+          <td class="text-end">{{ p.part }} %</td></tr>
+      {% empty %}
+      <tr><td colspan="6" class="text-muted text-center">Aucune donnée sur la période</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Analyse automatique -->
+<h2 class="h5">Analyse de l'expert</h2>
+{% for a in analyse %}
+<div class="alert alert-{{ a.niveau }} py-2" role="note"><strong>{{ a.titre }}.</strong> {{ a.texte }}</div>
+{% endfor %}
+
+{% if analyse_ia %}
+<div class="card border-primary mt-3">
+  <div class="card-header">✨ Analyse IA</div>
+  <div class="card-body" style="white-space: pre-line">{{ analyse_ia }}</div>
+  <div class="card-footer text-muted small">
+    Généré par IA à partir des chiffres ci-dessus (clients anonymisés). À vérifier avant toute décision.
+  </div>
+</div>
+{% endif %}
+
+{{ graph|json_script:"graph-data" }}
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const g = JSON.parse(document.getElementById("graph-data").textContent);
+    new Chart(document.getElementById("chartMois"), {
+      type: "bar",
+      data: { labels: g.labels, datasets: [
+        { label: "Facturé TTC", data: g.facture, backgroundColor: "#175cda" },
+        { label: "Encaissé", data: g.encaisse, backgroundColor: "#198754" }] }
+    });
+    new Chart(document.getElementById("chartAge"), {
+      type: "bar",
+      data: { labels: g.age_labels, datasets: [{ label: "Reste à payer (TND)", data: g.age_valeurs,
+        backgroundColor: ["#198754", "#ffc107", "#fd7e14", "#dc3545", "#842029"] }] },
+      options: { plugins: { legend: { display: false } } }
+    });
+  });
+</script>
+{% endblock %}

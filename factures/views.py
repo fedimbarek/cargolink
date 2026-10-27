@@ -10,8 +10,9 @@ from django.views.decorators.http import require_POST
 from propositions.models import Proposition
 from users.decorators import role_required
 
-from . import services
-from .forms import FactureCreationForm, FactureFilterForm, FactureForm, PaiementForm
+from . import bilan as bilan_calc, services
+from .forms import (BilanFilterForm, FactureCreationForm, FactureFilterForm, FactureForm,
+                    PaiementForm)
 from .models import Facture, Paiement
 
 S = Facture.Status
@@ -48,6 +49,28 @@ def liste(request):
         a_facturer = services.propositions_a_facturer(request.user)
     return render(request, "factures/liste.html",
                   {"factures": factures, "form": form, "stats": stats, "a_facturer": a_facturer})
+
+
+# ----------------------------------------------------------- bilan
+@login_required
+def bilan(request):
+    """Bilan de facturation (transporteur: CA / créances ; PME: dépenses / dettes ; admin: tout)."""
+    annee, mois = timezone.localdate().year, None
+    form = BilanFilterForm(request.GET or None, initial={"annee": annee})
+    if form.is_bound and form.is_valid():
+        annee = form.cleaned_data.get("annee") or annee
+        mois = int(form.cleaned_data["mois"]) if form.cleaned_data.get("mois") else None
+    b = bilan_calc.calculer_bilan(request.user, annee, mois)
+
+    analyse_ia = None
+    if request.GET.get("ia"):
+        analyse_ia = bilan_calc.analyse_ia(b)
+        if analyse_ia is None:
+            messages.warning(request, "Analyse IA indisponible (clé API absente ou service injoignable). "
+                                      "L'analyse automatique reste affichée.")
+    return render(request, "factures/bilan.html", {
+        "b": b, "form": form, "analyse": bilan_calc.analyse_regles(b), "analyse_ia": analyse_ia,
+        "graph": bilan_calc.donnees_graphique(b), "est_pme": request.user.role == "PME"})
 
 
 @login_required
