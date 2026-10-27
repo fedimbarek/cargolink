@@ -194,7 +194,8 @@ BREVO_SENDER_EMAIL = os.environ.get("BREVO_SENDER_EMAIL", "")
 BREVO_SENDER_NAME = os.environ.get("BREVO_SENDER_NAME", "CargoLink")
 SITE_URL = os.environ.get("SITE_URL", "http://127.0.0.1:8000")
 
-
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
 # --- CargoLink ---
 AUTH_USER_MODEL = 'users.User'
 

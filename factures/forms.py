@@ -83,3 +83,17 @@ class FactureFilterForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["status"].widget.attrs["class"] = "form-select form-select-sm"
+
+class BilanFilterForm(forms.Form):
+    MOIS = [("", "Toute l'année")] + [
+        (str(i), nom) for i, nom in enumerate(
+            ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet",
+             "Août", "Septembre", "Octobre", "Novembre", "Décembre"], 1)]
+
+    annee = forms.IntegerField(label="Année", required=False, min_value=2000, max_value=2100)
+    mois = forms.ChoiceField(label="Mois", required=False, choices=MOIS)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["annee"].widget.attrs["class"] = "form-control form-control-sm"
+        self.fields["mois"].widget.attrs["class"] = "form-select form-select-sm"        
