@@ -5,6 +5,8 @@ API externe utilisée par le module meteo : Open-Meteo (gratuite, aucune clé AP
 En cas de panne, on retourne un message d'erreur et l'application continue de marcher.
 """
 import hashlib
+import logging
+import time
 from datetime import timedelta
 
 import requests
@@ -15,9 +17,12 @@ from annonces.models import DemandeTransport
 
 from .models import AlerteMeteo, PrevisionMeteo
 
+logger = logging.getLogger(__name__)
+
 GEOCODING_URL = "https://geocoding-api.open-meteo.com/v1/search"
 FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
-TIMEOUT = 5
+HEADERS = {"User-Agent": "CargoLink-StackUnity/1.0 (projet universitaire Django)"}
+TIMEOUT = 6
 HORIZON_JOURS = 16                       # l'API prévoit au maximum 16 jours
 
 # seuils de risque pour un transport routier
@@ -53,11 +58,14 @@ def geocoder(ville):
     if coords:
         return coords
     try:
-        r = requests.get(GEOCODING_URL, params={"name": ville, "count": 1, "language": "fr", "format": "json"},
-                         timeout=TIMEOUT)
+        r = requests.get(GEOCODING_URL,
+                         params={"name": ville, "count": 1, "language": "fr", "format": "json"},
+                         headers=HEADERS, timeout=TIMEOUT)
+        logger.warning("Open-Meteo geocoding %r -> HTTP %s", ville, r.status_code)
         r.raise_for_status()
         resultats = r.json().get("results") or []
     except (requests.RequestException, ValueError):
+        logger.exception("Open-Meteo geocoding a échoué pour %r", ville)
         raise ErreurMeteo("API météo indisponible (géocodage). Réessayez plus tard.")
     if not resultats:
         return None
@@ -66,32 +74,49 @@ def geocoder(ville):
     return coords
 
 
-def prevision_jour(lat, lon, jour):
-    """Prévision d'un jour donné: dict (temp_min, temp_max, pluie, vent, code)."""
-    cle = f"meteo:prev:{round(lat, 2)}:{round(lon, 2)}:{jour.isoformat()}"
+def _prevision_16_jours(lat, lon):
+    """Un seul appel par lieu pour les 16 jours (mis en cache 1h) au lieu d'un appel par jour."""
+    cle = f"meteo:prev16:{round(lat, 2)}:{round(lon, 2)}"
     data = cache.get(cle)
     if data:
         return data
     params = {
         "latitude": lat, "longitude": lon, "timezone": "auto",
         "daily": "weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max",
-        "start_date": jour.isoformat(), "end_date": jour.isoformat(),
+        "forecast_days": HORIZON_JOURS,
     }
+    for tentative in range(2):
+        try:
+            r = requests.get(FORECAST_URL, params=params, headers=HEADERS, timeout=TIMEOUT)
+            logger.warning("Open-Meteo forecast -> HTTP %s", r.status_code)
+            if r.status_code == 429 or r.status_code >= 500:
+                logger.warning("Open-Meteo réponse: %s", r.text[:200])
+                time.sleep(2)
+                continue
+            r.raise_for_status()
+            data = r.json()["daily"]
+            cache.set(cle, data, 60 * 60)          # 1h
+            return data
+        except (requests.RequestException, ValueError, KeyError):
+            logger.exception("Open-Meteo a échoué (tentative %s)", tentative + 1)
+            time.sleep(1)
+    raise ErreurMeteo("API météo indisponible (prévision). Réessayez plus tard.")
+
+
+def prevision_jour(lat, lon, jour):
+    """Prévision d'un jour donné: dict (temp_min, temp_max, pluie, vent, code)."""
+    d = _prevision_16_jours(lat, lon)
     try:
-        r = requests.get(FORECAST_URL, params=params, timeout=TIMEOUT)
-        r.raise_for_status()
-        d = r.json()["daily"]
-        data = {
-            "temp_min": float(d["temperature_2m_min"][0]),
-            "temp_max": float(d["temperature_2m_max"][0]),
-            "pluie": float(d["precipitation_sum"][0] or 0),
-            "vent": float(d["wind_speed_10m_max"][0] or 0),
-            "code": int(d["weather_code"][0] or 0),
+        i = d["time"].index(jour.isoformat())
+        return {
+            "temp_min": float(d["temperature_2m_min"][i]),
+            "temp_max": float(d["temperature_2m_max"][i]),
+            "pluie": float(d["precipitation_sum"][i] or 0),
+            "vent": float(d["wind_speed_10m_max"][i] or 0),
+            "code": int(d["weather_code"][i] or 0),
         }
-    except (requests.RequestException, ValueError, KeyError, IndexError, TypeError):
+    except (ValueError, KeyError, IndexError, TypeError):
         raise ErreurMeteo("API météo indisponible (prévision). Réessayez plus tard.")
-    cache.set(cle, data, 60 * 60)            # 1h
-    return data
 
 
 # ---------------- règles métier ----------------
@@ -178,10 +203,8 @@ def mettre_a_jour(demande):
     return erreurs
 
 
-        
-
 # ---------------- qui voit quoi ----------------
-MAX_DEMANDES_PAR_ACTUALISATION = 10      # évite de bloquer la page (chaque demande = 2 appels API)
+MAX_DEMANDES_PAR_ACTUALISATION = 10      # évite de bloquer la page (chaque demande = 1 à 2 appels API)
 
 
 def demandes_du_user(user):
