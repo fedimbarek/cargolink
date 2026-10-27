@@ -1,76 +1,39 @@
 {
-  "entraine_le": "2026-10-27T11:59:16+00:00",
-  "sklearn": "1.8.0",
+  "entraine_le": "2026-10-23T11:07:53+00:00",
+  "sklearn": "1.9.1",
   "donnees": {
-    "synthetiques": 3000,
+    "synthetiques": 2000,
     "reelles": 0,
-    "train": 2100,
-    "calibration": 450,
-    "test": 450
+    "train": 1400,
+    "calibration": 300,
+    "test": 300
   },
   "retenu": "Gradient Boosting",
   "test_retenu": {
-    "mae": 23.11,
-    "rmse": 34.54,
-    "r2": 0.9708,
-    "mape": 8.41
+    "mae": 23.52,
+    "rmse": 38.56,
+    "r2": 0.9713,
+    "mape": 8.57
   },
-  "modeles": [
-    {
-      "nom": "Baseline (moyenne)",
-      "cv_rmse_log": 0.6243,
-      "cv_r2": -0.0017,
-      "test_mae": 132.61,
-      "test_rmse": 210.94,
-      "test_r2": -0.0879,
-      "test_mape": 49.87
-    },
-    {
-      "nom": "Régression linéaire",
-      "cv_rmse_log": 0.1382,
-      "cv_r2": 0.9509,
-      "test_mae": 30.89,
-      "test_rmse": 51.06,
-      "test_r2": 0.9363,
-      "test_mape": 11.01
-    },
-    {
-      "nom": "Random Forest",
-      "cv_rmse_log": 0.1293,
-      "cv_r2": 0.9568,
-      "test_mae": 28.64,
-      "test_rmse": 46.2,
-      "test_r2": 0.9478,
-      "test_mape": 9.88
-    },
-    {
-      "nom": "Gradient Boosting",
-      "cv_rmse_log": 0.1112,
-      "cv_r2": 0.9682,
-      "test_mae": 23.11,
-      "test_rmse": 34.54,
-      "test_r2": 0.9708,
-      "test_mape": 8.41
-    }
-  ],
+  "modeles": [],
   "intervalle": {
     "niveau": 0.9,
-    "couverture_test": 0.918,
-    "q_bas": -0.1726,
-    "q_haut": 0.1865
+    "couverture_test": 0.92,
+    "q_bas": -0.172,
+    "q_haut": 0.1858
   },
   "importances": {
-    "distance_km": 0.7782,
-    "weight": 0.1161,
-    "volume": 0.0449,
-    "cat_GENERAL": 0.0332,
-    "urgent": 0.0098,
-    "cat_DANGEREUX": 0.0089,
-    "cat_FRIGO": 0.0054,
-    "cat_FRAGILE": 0.0036
+    "distance_km": 0.762,
+    "weight": 0.1042,
+    "volume": 0.0729,
+    "cat_GENERAL": 0.0328,
+    "cat_DANGEREUX": 0.0113,
+    "urgent": 0.0088,
+    "cat_FRIGO": 0.0055,
+    "cat_FRAGILE": 0.0026
   },
   "latence": {
-    "moyenne_ms": 0.23,
-    "p95_ms": 0.35
+    "moyenne_ms": 0.33,
+    "p95_ms": 0.36
   }
 }
