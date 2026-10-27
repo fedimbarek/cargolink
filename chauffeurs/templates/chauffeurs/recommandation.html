@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Recommandation chauffeur{% endblock %}
+{% block content %}
+<h1 class="h3">Recommandation d’un chauffeur</h1>
+<p>Comparaison du trajet et de la marchandise avec les missions terminées.</p>
+<form method="get" class="card p-4 mb-4">
+  <label for="mission">Mission acceptée à préparer</label>
+  <select id="mission" name="mission" class="form-select mb-3" required>
+    <option value="">Choisir une mission</option>
+    {% for mission in missions %}
+    <option value="{{ mission.pk }}" {% if selection == mission.pk|stringformat:"s" %}selected{% endif %}>
+      Offre {{ mission.pk }} — {{ mission.demande }}
+    </option>
+    {% endfor %}
+  </select>
+  <button class="btn btn-primary" id="calculer" type="submit">Recommander</button>
+  <p id="chargement" role="status" hidden>Calcul en cours…</p>
+</form>
+{% if erreur %}
+<div class="alert alert-danger" role="alert">{{ erreur }}</div>
+{% elif selection %}
+  {% if resultats %}
+  <h2 class="h5">Chauffeurs classés par similarité</h2>
+  <ol class="list-group list-group-numbered mb-3">
+    {% for resultat in resultats %}
+    <li class="list-group-item">
+      {{ resultat.chauffeur }} — Similarité : {{ resultat.score }} / 1
+    </li>
+    {% endfor %}
+  </ol>
+  <p>Le score mesure la ressemblance des textes ; ce n’est pas une probabilité de réussite.</p>
+  <a class="btn btn-primary" href="{% url 'chauffeurs:affecter' %}">Choisir et affecter un chauffeur</a>
+  {% else %}
+  <div class="alert alert-info" role="status">
+    Aucun historique similaire pour les chauffeurs disponibles avec permis valide.
+    Vous pouvez effectuer une affectation manuelle.
+  </div>
+  {% endif %}
+{% endif %}
+{% if temps_ms != None %}<p class="text-muted mt-3">Temps du calcul : {{ temps_ms }} ms.</p>{% endif %}
+{% endblock %}
+{% block scripts %}
+<script>
+  document.querySelector('form[method="get"]').addEventListener('submit', function () {
+    document.getElementById('chargement').hidden = false;
+    document.getElementById('calculer').disabled = true;
+  });
+</script>
+{% endblock %}

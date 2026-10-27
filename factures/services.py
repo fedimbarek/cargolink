@@ -26,7 +26,7 @@ DELAI_DEFAUT_JOURS = 30
 class ErreurFacture(Exception):
     """Règle métier non respectée (message affichable à l'utilisateur)."""
 
-
+#factures....
 def factures_visibles(user):
     """Transporteur et PME voient leurs factures, y compris les brouillons; admin: tout."""
     qs = (Facture.objects
